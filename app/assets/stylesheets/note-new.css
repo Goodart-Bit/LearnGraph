@@ -1,0 +1,149 @@
+.column-container {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-width: fit-content;
+}
+
+.note-data {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+#note-page {
+    padding: 20px;
+    background-color: rgba(178, 235, 106, 1);
+    height: 500px;
+    width: 800px;
+}
+
+#note-page * {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.edit-style {
+    width: fit-content;
+    display: flex;
+    border: rgba(0, 0, 0, 0.55) solid 2px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#editor-tools {
+    height: 10%;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.edit-style {
+    display: inline-flex;
+    height: 90%;
+}
+
+.edit-style.small {
+    width: 20%;
+}
+
+.edit-style.medium {
+    width: 40%;
+}
+
+.edit-style button {
+    flex: 1;
+    cursor: pointer;
+    background-color: transparent;
+    font-weight: bolder;
+    border: none;
+    border-right: rgba(0, 0, 0, 0.55) solid 2px;
+}
+
+.edit-style button:hover, .edit-style button.selected {
+    background-color: rgba(0, 0, 0, 0.55) ;
+    border-right-color: transparent;
+    color: rgba(178, 235, 106, 1) !important;
+}
+
+.edit-style button:last-child {
+    border-right: none;
+}
+
+div.ProseMirror p {
+    margin: 5px;
+}
+
+div.ProseMirror {
+    height: 70%;
+    padding: 5px;
+    overflow-y: auto;
+}
+
+div.ProseMirror-focused {
+    outline: none;
+}
+
+#editor-holder {
+    height: 400px;
+    padding-bottom: 0;
+}
+
+#note-page a {
+    color:rgb(84, 47, 119);
+}
+
+.zk_link {
+    background-color: rgb(149, 106, 189);
+    border-radius: 10px;
+    padding: 5px;
+    color: white;
+    text-decoration-line: none;
+    display: inline-block;
+ }
+
+ a:hover {
+   cursor: pointer;
+ }
+
+ .zk_link:hover {
+    background-color: rgb(172, 115, 226);
+ }
+
+ form {
+    display: block;
+ }
+
+ #title {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 2.5em;
+ }
+
+ ::placeholder {
+    color: rgba(0, 0, 0, 0.55) ;
+ }
+
+ #bottom-bar > ul {
+    display: flex;
+    padding: 0;
+    list-style-type: none;
+    justify-content: space-between;
+ }
+
+ #bottom-bar li {
+    margin: 0;
+    padding: 0;
+ }
+
+ #bottom-bar .flexchild_left {
+    margin-right: auto;
+    margin-left: 15px;
+ }
+
+ input[type="submit"] {
+    margin: 0;
+    padding: 5px;
+    background-color: transparent;
+    border: 1px black solid;
+ }

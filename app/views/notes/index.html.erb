@@ -1,0 +1,7 @@
+<% @notes.each do |note| %>
+    <div>
+        Titulo: <%= note.title %><br>
+        Ultima mod: <%= note.updated_at %><br>
+        <%= link_to "Ver", note %>
+    </div>
+<% end %>

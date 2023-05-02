@@ -1,0 +1,67 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container {
+    border: 1px solid black;
+    padding: 10px 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.322);
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.help_links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.help_links p {
+    display: inline;
+}
+
+.form-container a {
+    color: black;
+    font-weight: bold;
+    text-decoration: dashed underline;
+}
+
+.link_variant {
+    color: green;
+}
+
+.field input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(72, 72, 72, 1);
+    margin-bottom: 15px;
+}
+
+em {
+    font-size: small;
+}
+
+input[type=submit] {
+    background-color: rgba(245, 220, 87, 1);
+    border-radius: 10px;
+    padding: 7px 15px;
+    margin: 5px 5px 10px;
+    border: 2px black solid;
+    font-weight: bolder;
+    font-size: large;
+    cursor: pointer;
+}
+
+input[type=submit].green {
+    background-color: rgba(146, 210, 155, 1);
+}

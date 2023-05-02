@@ -1,0 +1,22 @@
+<%= form_with model: @note do |f| %>                      
+    <div id="editor-holder" data-controller="tiptap" class="element"> 
+        <%= f.hidden_field :user_id, value: current_user.id %>     
+        <% if @note.new_record? %>
+            <%= f.hidden_field :body, data: {tiptap_target: "input"} %>
+            <%= f.text_field :title, placeholder: "Titulo de nota", id: "title" %>
+            <p class="note-data">Ultima modificacion: <%= Time.new.ctime %></p>
+        <% else %>
+            <%= f.hidden_field :body, data: {tiptap_target: "input"}, value: @note.body %>
+            <%= f.text_field :title, placeholder: "Titulo de nota", id: "title", value: @note.title %>
+            <p class="note-data">Ultima modificacion: <%= @note.updated_at %></p>
+        <% end %>  
+        <%= render "shared/tiptap_editor" %>
+        <div id="bottom-bar">
+            <ul>
+                <li>options</li>
+                <li class="flexchild_left">delete</li>
+                <li><%= f.submit "Guardar" %></li>
+            </ul>
+        </div>
+    </div>
+<% end %>
