@@ -1,3 +1,5 @@
+# LearnGraph
+A Note-taking app based on the Zettelkasten method made in RoR
 # README
 
 This README would normally document whatever steps are necessary to get the
