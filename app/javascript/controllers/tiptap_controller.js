@@ -3,6 +3,7 @@ import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
+import Iframe from './tiptap-extensions/iframe'
 
 export default class extends Controller {
         possible_attrs = ["bold","italic","underline","strike",'link',"bulletList","orderedList"]
@@ -10,14 +11,13 @@ export default class extends Controller {
 
         connect() {
           let context = this; 
-          console.log(document.getElementsByTagName("input"))
-          console.log(this.inputTargets)
           this.editor = new Editor({
             element: this.element,
             extensions: [
               StarterKit,
               Link,
-              Underline
+              Underline,
+              Iframe
             ],
             content: this.inputTarget.value,
             onTransaction() {
@@ -36,7 +36,7 @@ export default class extends Controller {
         }
 
         populateInput() {
-          this.inputTarget.value = editor.getHTML();
+          this.inputTarget.value = this.editor.getHTML();
         }
 
         getActiveAttributes(){
