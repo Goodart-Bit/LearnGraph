@@ -13,12 +13,32 @@ class NotesController < ApplicationController
         end
     end
 
+    def get_all
+        @notes = Note.all
+        render json: @notes
+    end
+
     def index
         @notes = Note.all
     end
 
     def show
         @note = Note.find(params[:id])
+        render json: @note
+    end
+
+    def edit
+        @note = Note.find(params[:id])
+    end
+
+    def update
+        @note = Note.find(params[:id])
+
+        if @note.update(note_params)
+            redirect_to @note
+        else
+            render :edit, status: :unprocessable_entity
+        end
     end
 
     def graph_index

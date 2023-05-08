@@ -4,7 +4,6 @@
     LearnGraph: Graph View
 </header>
 <div id="cy" data-controller="cytoscape">
-    <% @notes.each do |note| %>
-        <p data-cytoscape-target="note" class="hidden"><%= note.title %></p>
-    <% end %>
+    <p data-cytoscape-target="notesUrl" class="hidden"> <%= all_notes_url %></p>
+    <p data-cytoscape-target="path" class="hidden"> <%= notes_url + "/"%></p>
 </div>
