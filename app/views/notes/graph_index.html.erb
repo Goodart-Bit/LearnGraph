@@ -1,0 +1,10 @@
+<%= stylesheet_link_tag "graph-main", "data-turbo-track": "reload" %>
+<header>
+    <%= link_to "< Atrás", {:controller => :home, :action => :logged_in} %>
+    LearnGraph: Graph View
+</header>
+<div id="cy" data-controller="cytoscape">
+    <% @notes.each do |note| %>
+        <p data-cytoscape-target="note" class="hidden"><%= note.title %></p>
+    <% end %>
+</div>

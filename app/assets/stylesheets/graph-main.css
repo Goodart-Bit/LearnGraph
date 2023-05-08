@@ -1,0 +1,24 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+header {
+    background-color: rgb(4, 5, 12);
+    color: white;
+    padding: 10px;
+    font-size: 2em;
+    flex: 0.1;
+}
+
+#cy {
+    flex-grow: 1;
+    overflow: hidden;
+    background-color: rgb(145, 138, 138);
+}
+
+
+.hidden {
+    display: none;
+}

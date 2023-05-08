@@ -20,4 +20,8 @@ class NotesController < ApplicationController
     def show
         @note = Note.find(params[:id])
     end
+
+    def graph_index
+        @notes = Note.all
+    end
 end
