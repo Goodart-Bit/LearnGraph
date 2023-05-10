@@ -1,0 +1,29 @@
+#addition-container {
+    position: absolute;
+    background-color: rgb(236, 236, 236);
+    border-radius: 20px;
+    width: 50%;
+    height: fit-content;
+    top: 100px;
+    right: 20px;
+    padding: 20px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.322);
+}
+
+#addition-container input {
+    width: 70%;
+    padding: 8px;
+    border-radius: 20px;
+}
+
+#addition-container button {
+    padding: 6px;
+}
+
+#results-container {
+    padding: 20px;
+    height: 150px;
+    width: 80%;
+    background-color: rgb(175, 169, 161);
+    margin-bottom: 10px;
+}

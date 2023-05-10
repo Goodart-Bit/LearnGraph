@@ -20,3 +20,14 @@
         </div>
     </div>
 <% end %>
+<div id="addition-container" data-controller="linkmanager">
+    <p class="hidden" data-linkmanager-target="search_path"><%= notes_url + '/search/title=' %></p>
+    <input class="search" data-linkmanager-target="query" placeholder="Inserte el nombre de la nota a enlazar"></input>
+    <button data-action="linkmanager#sendQuery">Enviar</button>
+    <button>X</button>
+    <p>Notas</p>
+    <div id="results-container">
+        <form data-linkmanager-target="results"></form>
+    </div>
+    <button data-action="linkmanager#addLink">Enlazar</button>
+</div>

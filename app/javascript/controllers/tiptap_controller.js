@@ -10,8 +10,6 @@ export default class extends Controller {
 
         connect() {
           let context = this; 
-          console.log(document.getElementsByTagName("input"))
-          console.log(this.inputTargets)
           this.editor = new Editor({
             element: this.element,
             extensions: [
@@ -36,7 +34,7 @@ export default class extends Controller {
         }
 
         populateInput() {
-          this.inputTarget.value = editor.getHTML();
+          this.inputTarget.value = this.editor.getHTML();
         }
 
         getActiveAttributes(){

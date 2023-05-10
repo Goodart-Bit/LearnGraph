@@ -18,6 +18,17 @@ class NotesController < ApplicationController
         render json: @notes
     end
 
+    def lookup
+        param_queries = {title: "LOWER(title) LIKE :title", body: "LOWER(body) LIKE :body"} 
+        query_st = param_queries.keys.reduce("") do |query, param_key|
+            next(query) if params[param_key].nil?
+
+            query += " OR " unless query.empty?
+            query += param_queries[param_key]
+        end
+        render json: Note.where(query_st, {title: "%#{params[:title].downcase}%"}) #TODO: Exclude nil params
+    end
+
     def index
         @notes = Note.all
     end
