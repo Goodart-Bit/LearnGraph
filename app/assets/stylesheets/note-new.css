@@ -93,15 +93,6 @@ div.ProseMirror-focused {
     color:rgb(84, 47, 119);
 }
 
-.zk_link {
-    background-color: rgb(149, 106, 189);
-    border-radius: 10px;
-    padding: 5px;
-    color: white;
-    text-decoration-line: none;
-    display: inline-block;
- }
-
  a:hover {
    cursor: pointer;
  }

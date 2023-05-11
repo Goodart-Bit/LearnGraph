@@ -18,7 +18,7 @@ export default class extends Controller {
               Underline
             ],
             content: this.inputTarget.value,
-            onTransaction() {
+            onTransaction: ({editor}) => {
               context.highlightSelectedButtons();
             },
             onBlur({ editor }) {
@@ -85,4 +85,24 @@ export default class extends Controller {
         addUl() {
           this.editor.chain().focus().toggleBulletList().run();
         }
+
+        displayLinkHelper(){
+          const showLinkHelper = new CustomEvent("showLinkHelper")
+          window.dispatchEvent(showLinkHelper)
+        }
+
+        addNoteLink(event) {
+          let noteLinkElement = event.detail
+          noteLinkElement.className = "zk_link"
+          let noteLinkHTML = noteLinkElement.outerHTML
+          let editorLastPos = this.editor.view.state.selection.anchor
+          this.editor.commands.insertContentAt(editorLastPos, ` ${noteLinkHTML} `, {
+            updateSelection: true,
+            parseOptions: {
+              preserveWhitespace: 'full',
+            }
+          })
+        }
+        
+
 }
