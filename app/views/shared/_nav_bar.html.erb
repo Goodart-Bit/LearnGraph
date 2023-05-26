@@ -1,0 +1,22 @@
+
+<%= stylesheet_link_tag "nav_bar", "data-turbo-track": "reload" %>
+<ul class="nav-bar">
+    <a href="./" class="icon">
+        <li><i class="cib-graphcool" id="logo"></i></li>
+    </a>
+    <% if current_user %> <!-- DEVISE USER VALIDATION -->
+        <a href="https://www.google.com/">
+            <li>Mi perfil</li>
+        </a>
+        <a href="./users/sign_in" class="nav-btn alert-tone">
+            <li>SALIR</li>
+        </a>
+    <% else %>
+        <a href="https://www.google.com/">
+            <li>Sobre LearnGraph</li>
+        </a>
+        <a href="./users/sign_in" class="nav-btn default-tone">
+            <li>INGRESA</li>
+        </a>
+    <% end %>
+</ul>
