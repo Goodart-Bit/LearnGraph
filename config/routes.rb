@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
   devise_for :views
   devise_for :users, controllers: {
-    registrations: 'users/registrations'
+    registrations: 'users/registrations',
   }
-  get '/logged_in' => "home#logged_in", :as => :user_root
+  devise_scope :user do  
+    get '/users/sign_out' => 'devise/sessions#destroy'     
+ end
+  get '/welcome' => "home#welcome", :as => :user_root
   resources 'notes', :only => [:new, :create, :index, :show, :edit, :update]
   get '/all_notes' => "notes#get_all"
   get '/notes_graph' => "notes#graph_index"

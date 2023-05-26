@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/all.min.css"> <!-- CoreUI Icon Pack CDN -->
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <meta name="turbo-visit-control" content="reload">
     <%= javascript_importmap_tags %>
   </head>
 
@@ -21,6 +21,10 @@
     <%if(alert)%>
       <p class="alert"><%= alert %></p>
     <%end%>
-    <%= yield %>
+    <%= stylesheet_link_tag "home", "data-turbo-track": "reload" %>
+    <%= render partial: "shared/nav_bar" %>
+    <div class="view-container">
+      <%= yield %>
+    </div>
   </body>
 </html>

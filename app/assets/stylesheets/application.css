@@ -48,3 +48,13 @@
  .shadowed {
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.322);
  }
+
+ .nav-bar {
+   height: 10vh;
+ }
+
+ .view-container {
+   height: 90vh;
+   display: flex;
+   flex-direction: column;
+ }

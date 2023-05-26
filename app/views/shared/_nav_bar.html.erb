@@ -3,14 +3,13 @@
 <ul class="nav-bar">
     <a href="./" class="icon">
         <li><i class="cib-graphcool" id="logo"></i></li>
+        <p id="icon-text">LearnGraph</p>
     </a>
     <% if current_user %> <!-- DEVISE USER VALIDATION -->
         <a href="https://www.google.com/">
             <li>Mi perfil</li>
         </a>
-        <a href="./users/sign_in" class="nav-btn alert-tone">
-            <li>SALIR</li>
-        </a>
+        <%= link_to "Salir", destroy_user_session_path, method: :delete %>
     <% else %>
         <a href="https://www.google.com/">
             <li>Sobre LearnGraph</li>
