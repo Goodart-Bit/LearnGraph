@@ -15,16 +15,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_012019) do
   enable_extension "plpgsql"
 
   create_table "edges", force: :cascade do |t|
-    t.bigint "source", null: false
-    t.bigint "target", null: false
-    t.bigint "user_id", null: false
+    t.bigint "source_id", null: false
+    t.bigint "target_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_edges_on_user_id"
+    t.index ["source_id"], name: "index_edges_on_source_id"
+    t.index ["target_id"], name: "index_edges_on_target_id"
   end
 
   create_table "notes", force: :cascade do |t|
-    t.string "title"
+    t.string "title", limit: 255, null: false
     t.bigint "user_id", null: false
     t.text "body"
     t.datetime "created_at", null: false
@@ -58,8 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_012019) do
     t.index ["reset_password_token"], name: "index_views_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "edges", "notes", column: "source"
-  add_foreign_key "edges", "notes", column: "target"
-  add_foreign_key "edges", "users"
+  add_foreign_key "edges", "notes", column: "source_id"
+  add_foreign_key "edges", "notes", column: "target_id"
   add_foreign_key "notes", "users"
 end
