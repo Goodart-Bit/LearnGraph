@@ -20,6 +20,23 @@ class NotesController < ApplicationController
         render json: @notes
     end
 
+    def get_by_title
+        title_arg = "%#{params[:title_query]}%"
+        @match_notes = Note.where("title LIKE ? AND id != ?", title_arg, params[:id])
+        render partial: 'notes/shared/link_note_form'
+    end
+
+    def link_note
+        @src_note = Note.find(params[:id])
+        @target_note = Note.find(params[:target[id]])
+        if cache_links(@src_note, @target_note)
+            render action: edit, notice: 'Enlace enlazado correctamente, asegurese de guardar'
+        else
+            render action: edit, alert: 'Hubo un error al procesar el enlace,
+             asegurese de seleccionar una nota de destino'
+        end
+    end
+
     def index
         @notes = current_user.notes
     end
@@ -38,5 +55,19 @@ class NotesController < ApplicationController
     end
 
     def graph_index
+    end
+
+    private
+
+    def cache_links(src_note, target_note)
+        begin
+            src_note.pointers += [target_note]
+            target_note.mentions += [src_note]
+            flash.now[:mod_src] = src_note
+            flash.now[:mod_target] = target_note
+        rescue => exception
+            puts exception
+            return false
+        end
     end
 end

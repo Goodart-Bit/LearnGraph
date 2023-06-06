@@ -1,0 +1,17 @@
+<%= content_for :head do %>
+  <%= stylesheet_link_tag 'linker', 'data-turbo-track': 'reload' %>
+<% end %>
+<div class="note-linker">
+  <%= form_with url: get_notes_by_title_url(title_query: ''), method: :get do |f| %>
+    <%= f.label :title_query, 'Título:'%>
+    <%= f.text_field :title_query %>
+    <%= f.submit 'Buscar' %>
+  <% end %>
+  <%= form_with url: link_note_path(id: params[:id]), method: :post do |f| %>
+    <% @match_notes&.each do |note| %>
+      <%= f.hidden_field 'target_id', value: note.id.to_s %>
+      <%= f.label :target_selected, note.title %>
+      <%= f.radio_button 'target', 'selected' %><br>
+    <% end %>
+  <% end %>
+</div>
