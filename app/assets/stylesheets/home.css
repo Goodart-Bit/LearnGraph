@@ -9,7 +9,7 @@ header {
 
 .main-container {
     display: flex;
-    height: 90%;
+    height: 100%;
 }
 
 .main-container > div {
