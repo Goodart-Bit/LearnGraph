@@ -14,7 +14,7 @@ class NotesController < ApplicationController
     end
 
     def get_all
-        @notes = Note.all
+        @notes = current_user.notes
         render json: @notes
     end
 
@@ -36,6 +36,5 @@ class NotesController < ApplicationController
     end
 
     def graph_index
-        @notes = Note.all
     end
 end
