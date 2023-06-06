@@ -14,7 +14,7 @@
 #note-page {
     padding: 20px;
     background-color: rgba(178, 235, 106, 1);
-    height: 500px;
+    height: 400px;
     width: 800px;
 }
 
@@ -74,7 +74,7 @@ div.ProseMirror p {
 }
 
 div.ProseMirror {
-    height: 70%;
+    height: 200px;
     padding: 5px;
     overflow-y: auto;
 }
@@ -84,7 +84,7 @@ div.ProseMirror-focused {
 }
 
 #editor-holder {
-    height: 400px;
+    height: 100%;
     padding-bottom: 0;
 }
 

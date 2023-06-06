@@ -7,9 +7,11 @@ class NotesController < ApplicationController
         note_data = params[:note]
         @note = Note.new(title: note_data[:title], body: note_data[:body], user_id: current_user.id)
         if @note.save
-            puts "saved succesfully"
+            flash[:alert] = 'Nota guardada con éxito' # TODO: Fish flash alert not showing on redirect
+            redirect_to edit_note_path(@note), status: :see_other
         else
-            p @note.errors
+            flash[:alert] = 'Hubo un error al intentar guardar la nota'
+            render action: :new, status: :unprocessable_entity
         end
     end
 
@@ -19,7 +21,7 @@ class NotesController < ApplicationController
     end
 
     def index
-        @notes = Note.all
+        @notes = current_user.notes
     end
 
     def show

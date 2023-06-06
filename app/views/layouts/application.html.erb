@@ -15,12 +15,9 @@
   </head>
 
   <body>
-    <%if(notice)%>
-      <p class="notice"><%= notice %></p>
-    <%end%>
-    <%if(alert)%>
-      <p class="alert"><%= alert %></p>
-    <%end%>
+    <% flash.each do |class_name, msg| %>
+      <%= content_tag :div, msg, class: class_name %>
+    <% end %>
     <%= stylesheet_link_tag "home", "data-turbo-track": "reload" %>
     <%= render partial: "shared/nav_bar" %>
     <div class="view-container">
