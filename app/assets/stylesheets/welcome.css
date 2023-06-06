@@ -1,8 +1,5 @@
-.view-container > div {
-    margin-left: 100px;
-}
-
 #options-container {
+    margin-left: 100px;
     width: 80%;
     height: 60%;
     display: flex;
@@ -48,6 +45,7 @@
 
 #greeting {
     margin-top: 50px;
+    margin-left: 100px;
 }
 
 .option .icon {
