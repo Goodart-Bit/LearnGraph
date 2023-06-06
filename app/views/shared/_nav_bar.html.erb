@@ -11,10 +11,10 @@
         </a>
         <%= link_to "Salir", destroy_user_session_path, method: :delete %>
     <% else %>
-        <a href="https://www.google.com/">
+        <a href="<%= root_path %>">
             <li>Sobre LearnGraph</li>
         </a>
-        <a href="./users/sign_in" class="nav-btn default-tone">
+        <a href="<%= new_user_session_path %>" class="nav-btn default-tone">
             <li>INGRESA</li>
         </a>
     <% end %>
