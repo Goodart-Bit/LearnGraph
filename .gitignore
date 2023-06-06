@@ -103,5 +103,5 @@ yarn-debug.log*
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-# RubyMine db connect
-.idea/dataSources.xml
+# Rubymine integration
+.idea/*
