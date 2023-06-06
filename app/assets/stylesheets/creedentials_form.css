@@ -4,9 +4,10 @@ body {
     align-items: center;
 }
 
-.form-container {
+.form-container { /*TODO: Fit registration form to parent*/
     border: 1px solid black;
-    padding: 10px 8%;
+    padding: 10px 60px;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
