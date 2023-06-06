@@ -1,6 +1,6 @@
-<%= form_with model: @note do |f| %>                      
-    <div id="editor-holder" data-controller="tiptap" class="element"> 
-        <%= f.hidden_field :user_id, value: current_user.id %>     
+<%= render "notes/shared/link_note_form" %>
+<%= form_with model: @note do |f| %>
+    <div id="editor-holder" data-controller="tiptap" class="element">
         <% if @note.new_record? %> 
             <%= f.hidden_field :body, data: {tiptap_target: "input"} %>
             <%= f.text_field :title, placeholder: "Titulo de nota", id: "title" %>
@@ -10,7 +10,7 @@
             <%= f.text_field :title, placeholder: "Titulo de nota", id: "title", value: @note.title %>
             <p class="note-data">Ultima modificacion: <%= @note.updated_at %></p>
         <% end %>
-        <%= render "shared/tiptap_editor" %>
+        <%= render "notes/shared/tiptap_editor" %>
         <div id="bottom-bar">
             <ul>
                 <li>options</li>
