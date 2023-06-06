@@ -1,4 +1,4 @@
-<%= render "notes/shared/link_note_form" %>
+<%= render "notes/shared/link_note_form" if @note.id %>
 <%= form_with model: @note do |f| %>
     <div id="editor-holder" data-controller="tiptap" class="element">
         <% if @note.new_record? %> 
