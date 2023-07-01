@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get '/welcome' => "home#welcome", as: :user_root
   root to: "home#index"
   # NOTE ROUTES
-  resources 'notes', :only => [:new, :create, :index, :show, :edit, :update]
+  resources 'notes'
   get '/all_notes' => "notes#get_all"
   get '/notes_graph' => "notes#graph_index"
   get '/notes/:id/find/' => 'notes#get_by_title', as: :get_notes_by_title

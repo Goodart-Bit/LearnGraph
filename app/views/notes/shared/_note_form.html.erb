@@ -13,8 +13,8 @@
         <%= render "notes/shared/tiptap_editor" %>
         <div id="bottom-bar">
             <ul>
-                <li>options</li>
-                <li class="flexchild_left">delete</li>
+                <%= link_to raw("<i class=\"cil-trash\"></i>"), @note, data: { 'turbo-method': :delete },
+                            class: 'icon-container' %>
                 <li><%= f.submit "Guardar" %></li>
             </ul>
         </div>

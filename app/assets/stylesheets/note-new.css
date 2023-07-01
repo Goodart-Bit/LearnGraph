@@ -147,3 +147,12 @@ div.ProseMirror-focused {
     background-color: transparent;
     border: 1px black solid;
  }
+
+ .icon-container {
+     text-decoration: none;
+ }
+
+ i {
+     font-size: 1.5em;
+     cursor: pointer;
+ }

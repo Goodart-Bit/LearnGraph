@@ -3,7 +3,7 @@ class NotesController < ApplicationController
         @note = Note.new
     end
 
-    def create
+    def Fcreate
         @note = Note.new(note_params)
         @note.user_id = current_user.id
         if @note.save
@@ -57,6 +57,15 @@ class NotesController < ApplicationController
             render action: :edit, status: :ok
         else
             render action: :edit, status: :unprocessable_entity, alert: 'Hubo un error al intentar actualizar la nota'
+        end
+    end
+
+    def destroy
+        @note = Note.find(params[:id])
+        if @note.destroy
+            redirect_to notes_path, notice: 'Se eliminó la nota correctamente'
+        else
+            flash.now[:alert] = 'Hubo un error al intentar borrar la nota'
         end
     end
 
