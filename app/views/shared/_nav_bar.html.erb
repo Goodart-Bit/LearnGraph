@@ -1,8 +1,8 @@
 
 <%= stylesheet_link_tag "nav_bar", "data-turbo-track": "reload" %>
 <ul class="nav-bar">
-    <a href="./" class="icon">
-        <li><i class="cib-graphcool" id="logo"></i></li>
+    <a href="<%= root_url %>" class="icon">
+        <i class="cib-graphcool" id="logo"></i>
         <p id="icon-text">LearnGraph</p>
     </a>
     <% if current_user %> <!-- DEVISE USER VALIDATION -->
@@ -11,7 +11,7 @@
         </a>
         <%= link_to "Salir", destroy_user_session_path, method: :delete %>
     <% else %>
-        <a href="<%= root_path %>">
+        <a href="<%= root_url %>">
             <li>Sobre LearnGraph</li>
         </a>
         <a href="<%= new_user_session_path %>" class="nav-btn default-tone">
