@@ -3,7 +3,7 @@ class NotesController < ApplicationController
         @note = Note.new
     end
 
-    def Fcreate
+    def create
         @note = Note.new(note_params)
         @note.user_id = current_user.id
         if @note.save
@@ -62,11 +62,11 @@ class NotesController < ApplicationController
 
     def destroy
         @note = Note.find(params[:id])
-        if @note.destroy
-            redirect_to notes_path, notice: 'Se eliminó la nota correctamente'
-        else
+        unless @note.destroy
             flash.now[:alert] = 'Hubo un error al intentar borrar la nota'
+            return render @note
         end
+        redirect_to notes_path, notice: 'Se eliminó la nota correctamente'
     end
 
     def graph_index
