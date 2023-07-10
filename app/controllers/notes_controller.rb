@@ -15,15 +15,12 @@ class NotesController < ApplicationController
         end
     end
 
-    def get_all
-        @notes = current_user.notes
-        render json: @notes
-    end
-
     def get_by_title
-        title_arg = "%#{params[:title_query]}%"
-        @match_notes = Note.where("title LIKE ? AND id != ?", title_arg, params[:id])
-        render partial: 'notes/shared/link_note_form'
+        title_arg = "%#{params[:title_query]}%".downcase
+        @match_notes = Note.select(:id, :user_id, :title).
+          where("LOWER(title) LIKE ? AND id != ? AND user_id = ?", title_arg, params[:id], current_user.id).to_a
+        p @match_notes
+        respond_to { |format| format.turbo_stream }
     end
 
     def link_note

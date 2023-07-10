@@ -2,16 +2,13 @@
   <%= stylesheet_link_tag 'linker', 'data-turbo-track': 'reload' %>
 <% end %>
 <div class="note-linker">
-  <%= form_with url: get_notes_by_title_path(current_user.id), method: :get do |f| %>
-    <%= f.label :title_query, 'Título:'%>
-    <%= f.text_field :title_query %>
-    <%= f.submit 'Buscar' %>
-  <% end %>
-  <%= form_with url: link_note_path(id: @note.id), method: :post do |f| %>
-    <% @match_notes&.each do |note| %>
-      <%= f.hidden_field 'target_id', value: note.id.to_s %>
-      <%= f.label :target_selected, note.title %>
-      <%= f.radio_button 'target', 'selected' %><br>
+  <%= turbo_frame_tag id="filter-notes" do %>
+    <%= form_with url: get_notes_by_title_path, method: :get do |f| %>
+      <%= f.label :title_query, 'Título:'%>
+      <%= f.text_field :title_query %>
+      <%= f.submit 'Buscar' %>
     <% end %>
   <% end %>
+  <div id="filtered-notes">
+  </div>
 </div>
