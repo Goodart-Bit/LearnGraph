@@ -7,6 +7,7 @@ import Underline from '@tiptap/extension-underline'
 export default class extends Controller {
         possible_attrs = ["bold","italic","underline","strike",'link',"bulletList","orderedList"]
         static targets = ["input"]
+        editorEle = null;
 
         connect() {
           let context = this; 
@@ -29,10 +30,20 @@ export default class extends Controller {
             onCreate({ editor }) {
               let parent = document.getElementById("editor-holder")
               let bottom_bar = document.getElementById("bottom-bar")
-              let editor_box = document.getElementsByClassName("ProseMirror")[0]
-              parent.insertBefore(editor_box, bottom_bar)
+              context.editorEle = document.getElementsByClassName("ProseMirror")[0];
+              context.setupLinkListener();
+              parent.insertBefore(context.editorEle, bottom_bar)
             }
           });
+        }
+
+        setupLinkListener() {
+            this.editorEle.addEventListener('appendLink', (e) => {
+                let linkData = e.detail.note;
+                let currentPos = this.editor.state.selection.anchor
+                console.log(linkData)
+                this.addZkLink(currentPos, linkData.title, linkData.url)
+            })
         }
 
         populateInput() {
@@ -86,5 +97,9 @@ export default class extends Controller {
 
         addUl() {
           this.editor.chain().focus().toggleBulletList().run();
+        }
+
+        addZkLink(pos, name, url) {
+            this.editor.commands.insertContentAt(pos, `<a href=${url} class='zk_link'>${name}</a>`)
         }
 }
