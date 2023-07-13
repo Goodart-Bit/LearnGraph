@@ -23,9 +23,9 @@ export default class extends Controller {
             content: this.inputTarget.value,
             onTransaction() {
               context.highlightSelectedButtons();
+              context.populateInput();
             },
             onBlur({ editor }) {
-              context.populateInput();
             },
             onCreate({ editor }) {
               let parent = document.getElementById("editor-holder")
