@@ -100,6 +100,7 @@ export default class extends Controller {
         }
 
         addZkLink(pos, name, url) {
-            this.editor.commands.insertContentAt(pos, `<a href=${url} class='zk_link'>${name}</a>`)
+            let space = ' '
+            this.editor.commands.insertContentAt(pos, space + `<a href=${url} class='zk_link'>${name}</a>` + space)
         }
 }
