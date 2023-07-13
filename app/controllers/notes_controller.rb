@@ -1,4 +1,5 @@
 class NotesController < ApplicationController
+    before_action :set_note, only: %i[show edit update destroy]
     def new
         @note = Note.new
     end
@@ -20,16 +21,13 @@ class NotesController < ApplicationController
     end
 
     def show
-        @note = Note.find(params[:id])
         render json: @note
     end
 
     def edit
-        @note = Note.find(params[:id])
     end
 
     def update
-        @note = Note.find(params[:id])
         if @note.update(note_params)
             flash.now[:notice] = 'La nota se actualizó correctamente'
             render action: :edit, status: :ok
@@ -39,7 +37,6 @@ class NotesController < ApplicationController
     end
 
     def destroy
-        @note = Note.find(params[:id])
         unless @note.destroy
             flash.now[:alert] = 'Hubo un error al intentar borrar la nota'
             return render @note
@@ -52,7 +49,20 @@ class NotesController < ApplicationController
 
     private
 
-    def note_params
-        params.require(:note).permit(:title, :body, pointers_attributes: [:source, :target])
+    def set_note
+        @note = Note.find(params[:id])
     end
+
+    def note_params
+        permitted_attributes = params.require(:note).permit(:title, :body, pointers_attributes: [:id, :target_id])
+        map_target_notes permitted_attributes[:pointers_attributes]
+        permitted_attributes
+    end
+
+    def map_target_notes(permit_pointer_attrs)
+        permit_pointer_attrs.to_h.each do |idx, edge|
+            target_id = edge[:target_id]
+            permit_pointer_attrs[idx][:target] = Note.find(target_id) # CREATES A [:target] PARAMETER
+        end                                                           # TO FILL IN EDGE FROM ASSOCIATION
+    end                                                               # AS IT DOESNT RECEIVE TARGET_IDS BY DEFAULT
 end
