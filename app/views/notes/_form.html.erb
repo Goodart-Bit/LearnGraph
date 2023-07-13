@@ -8,6 +8,12 @@
             <%= f.hidden_field :body, data: {tiptap_target: "input"}, value: @note.body %>
             <%= f.text_field :title, placeholder: "Titulo de nota", id: "title", value: @note.title %>
             <p class="note-data">Ultima modificacion: <%= @note.updated_at %></p>
+            <%= render "notes/shared/link_note_form", note: @note, note_form: f %>
+            <div id='pointer-edges'>
+              <%= f.fields_for :pointers do |pointers_f| %>
+                <%= render 'edges/form', f: pointers_f %>
+              <% end %>
+            </div>
         <% end %>
         <%= render "notes/shared/tiptap_editor" %>
         <div id="bottom-bar">

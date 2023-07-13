@@ -3,12 +3,17 @@
 <% end %>
 <div class="note-linker">
   <%= turbo_frame_tag id="filter-notes" do %>
-    <%= form_with url: get_notes_by_title_path, method: :get do |f| %>
+    <form>
+
+    </form>
+    <% pointer_index = note.pointers.size %>
+    <%= form_with url: new_edge_path(pointer_index), method: :get do |f| %>
+      <%= f.hidden_field :note_id, value: note.id %>
       <%= f.label :title_query, 'Título:'%>
       <%= f.text_field :title_query %>
       <%= f.submit 'Buscar' %>
     <% end %>
+    <div id="filtered-notes">
+    </div>
   <% end %>
-  <div id="filtered-notes">
-  </div>
 </div>

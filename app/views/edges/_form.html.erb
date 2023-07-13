@@ -1,0 +1,5 @@
+<%= turbo_frame_tag "edge_#{f.index}" do %>
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :source, value: params[:source_id], readonly: true %>
+  <%= f.hidden_field :target, value: params[:target_id], readonly: true %>
+<% end %>

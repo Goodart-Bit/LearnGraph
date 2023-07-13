@@ -15,25 +15,6 @@ class NotesController < ApplicationController
         end
     end
 
-    def get_by_title
-        title_arg = "%#{params[:title_query]}%".downcase
-        @match_notes = Note.select(:id, :user_id, :title).
-          where("LOWER(title) LIKE ? AND id != ? AND user_id = ?", title_arg, params[:id], current_user.id).to_a
-        p @match_notes
-        respond_to { |format| format.turbo_stream }
-    end
-
-    def link_note
-        @src_note = Note.find(params[:id])
-        @target_note = Note.find(params[:target[id]])
-        if cache_links(@src_note, @target_note)
-            render action: edit, notice: 'Enlace enlazado correctamente, asegurese de guardar'
-        else
-            render action: edit, alert: 'Hubo un error al procesar el enlace,
-             asegurese de seleccionar una nota de destino'
-        end
-    end
-
     def index
         @notes = current_user.notes
     end
@@ -72,18 +53,6 @@ class NotesController < ApplicationController
     private
 
     def note_params
-        params.require(:note).permit(:title, :body)
-    end
-
-    def cache_links(src_note, target_note)
-        begin
-            src_note.pointers += [target_note]
-            target_note.mentions += [src_note]
-            flash.now[:mod_src] = src_note
-            flash.now[:mod_target] = target_note
-        rescue => exception
-            puts exception
-            return false
-        end
+        params.require(:note).permit(:title, :body, pointers_attributes: [:source, :target])
     end
 end

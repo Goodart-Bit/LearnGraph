@@ -10,10 +10,18 @@ Rails.application.routes.draw do
   get '/welcome' => "home#welcome", as: :user_root
   root to: "home#index"
   # NOTE ROUTES
-  resources 'notes'
-  get '/notes_graph' => "notes#graph_index"
-  get '/notes/:id/find/' => 'notes#get_by_title', as: :get_notes_by_title, defaults: { format: :turbo_stream }
-  post 'notes/:id/edit/link' => 'notes#link_note', as: :link_note
+  resources 'notes' do
+    collection do
+      get 'graph' => 'notes#graph_index'
+    end
+  end
+  resources 'edges', only: [], param: :index do
+    member do
+      get '/new' => 'edges#new', defaults: { format: 'turbo_stream' }
+      post '/' => 'edges#create', defaults: { format: 'turbo_stream' }
+      # delete '(:id)' => 'edges#destroy', as: ''
+    end
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # Defines the root path route ("/")
   # root "articles#index"
