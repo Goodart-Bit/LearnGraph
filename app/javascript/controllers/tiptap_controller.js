@@ -35,16 +35,52 @@ export default class extends Controller {
                 handleDOMEvents: {
                     keydown: (view, e) => {
                         let keyId = e.which
-                        if (keyId !== 8) return;
-                        let modifiedNode = this.getNodeInCursor()
-                        if (modifiedNode) this.removeLinkMark(modifiedNode);
+                        this.updateModifiedLink(keyId)
                     },
                     appendLink: (view, e) => {
                         let linkData = e.detail.note;
                         this.addZkLink(linkData.title, linkData.url)
                     }
-                },
+                }
             }
+        });
+    }
+
+    updateModifiedLink(pressedKeyId){
+        if (!this.mutableKeyEventOnLink(pressedKeyId)) return;
+        if(pressedKeyId === 8) return this.deleteFocusLinkMark(true);
+        let touchedNodeText = this.getNodeInCursor().text;
+        let textCursorIdx = this.getNoteTextCursorIdx(touchedNodeText);
+        let corruptingUpdate = textCursorIdx > 0 && textCursorIdx < touchedNodeText.length
+        this.deleteFocusLinkMark(corruptingUpdate);
+    }
+
+    getNoteTextCursorIdx(textNodeStr) {
+        let parentText = this.editor.state.selection.$head.parent.textContent
+        let nodeCursorPos = this.editor.state.selection.$anchor.parentOffset
+        let noteTextStartPos = this.findNestedStartPos(parentText, textNodeStr, nodeCursorPos)
+        return nodeCursorPos - noteTextStartPos
+    }
+
+    findNestedStartPos(parentText, nodeText, parentCursorPos) {
+        if(!parentText.includes(nodeText)) return -1;
+        for(let idx = 0; parentText.length >= nodeText.length; idx++){
+            if(parentText.slice(0, nodeText.length) === nodeText){
+                let endIdx = idx + nodeText.length
+                if(parentCursorPos >= idx && parentCursorPos <= endIdx) return idx; // The idx has to point to the correct cursor pos
+            }
+            parentText = parentText.slice(1, parentText.length);
+        }
+    }
+
+    mutableKeyEventOnLink(eventKeyId){
+        return this.keyCodeEdits(eventKeyId) && this.focusedOnLink(eventKeyId);
+    }
+
+    keyCodeEdits(keyId){
+        let editKeyRanges = [[8,13],[32,32],[48, 90],[96, 111],[186, 222]]
+        return editKeyRanges.some((range) => {
+            return keyId >= range[0] && keyId <= range[1];
         });
     }
 
@@ -102,15 +138,18 @@ export default class extends Controller {
     }
 
     // LINK HANDLERS
-    addZkLink(name, url) {
-        let space = ' '
-        this.editor.commands.insertContent(space + `<a href=${url} class='zk_link'>${name}</a>` + space);
+    focusedOnLink(){
+        let node = this.getNodeInCursor();
+        if(!node) return false;
+        return node.marks.find((mark) => { return mark.type.name === 'link'; })
     }
 
-    removeLinkMark(node) {
-        node.marks = node.marks.filter((mark) => {
-            return mark.type.name !== 'link'
-        })
+    addZkLink(name, url) {
+        this.editor.commands.insertContent(`<a href=${url} class='zk_link'>${name}</a>`);
+    }
+
+    deleteFocusLinkMark(unsetNodeLink) {
+        unsetNodeLink ? this.editor.commands.unsetLink() : this.editor.commands.unsetMark('link');
     }
 
     // GLOBAL METHODS
@@ -120,9 +159,8 @@ export default class extends Controller {
     }
 
     getNodeInCursor() {
-        let resolvedPos = this.editor.state.selection.$head
-        let posInNode = resolvedPos.parentOffset - 1
-        if (posInNode < 0) return null;
+        let resolvedPos = this.editor.state.selection.$head.parentOffset
+        let posInNode = resolvedPos > 0 ? resolvedPos - 1 : 0
         return this.editor.state.selection.$head.parent.nodeAt(posInNode)
     }
 }
