@@ -95,7 +95,8 @@ div.ProseMirror-focused {
 .zk_link {
     background-color: rgb(149, 106, 189);
     border-radius: 10px;
-    padding: 5px;
+    padding: 3px;
+    margin-bottom: 3px;
     color: white;
     text-decoration-line: none;
     display: inline-block;
