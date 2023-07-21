@@ -10,18 +10,7 @@
                       formmethod: :post,
                       formnovalidate: true,
                       id: "add-link",
-                      style: 'display: block' %>
-    <% end %>
-    <%= turbo_stream.replace "append-editor-script" do %>
-      <script type="text/javascript" id="append-editor-script">
-          async function appendLinkToEditor(){
-              const targetNoteId = '<%= params[:target_id] %>';
-              const targetNote = await getNote(targetNoteId);
-              const appendRequest  = new CustomEvent('appendLink', { detail: {note: targetNote}});
-              editor.dispatchEvent(appendRequest);
-          }
-          appendLinkToEditor();
-      </script>
+                      style: 'display: block', 'data-action': "tiptap#appendLinkToEditor"  %>
     <% end %>
   <% end %>
 <% end %>

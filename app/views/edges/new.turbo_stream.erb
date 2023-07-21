@@ -2,26 +2,13 @@
     <% if @match_notes.empty? %>
       <p>No se encontro ninguna coincidencia</p>
     <% else %>
-      <%= form_with url: edge_path, method: :post  do |f| %>
+      <%= form_with url: edge_path, method: :post, id: 'link-select-form'  do |f| %>
         <%= f.hidden_field :source_id, value: params[:note_id] %>
         <% @match_notes.each do |match_note| %>
           <%= f.radio_button :target_id, match_note.id %>
           <%= f.label "target_id_#{match_note.id}".to_sym, match_note.title %>
         <% end %>
-        <%= f.submit 'Enlazar', style: 'display: block', id: 'add-link'  %>
+        <%= f.submit 'Enlazar', style: 'display: block', id: 'add-link', 'data-action': "tiptap#appendLinkToEditor"  %>
       <% end %>
     <% end %>
-  <script type="text/javascript">
-      const editor = document.getElementsByClassName("ProseMirror")[0];
-      const notesUrl = '<%= notes_url %>'
-      const addLinkBtn = document.getElementById('add-link')
-      async function getNote(id){
-          const noteUrl = notesUrl+`/${id}`
-          const noteResponse = await fetch(noteUrl)
-          let note = await noteResponse.json();
-          note.url = noteUrl
-          return note;
-      }
-  </script>
-  <script type="text/javascript" id="append-editor-script"></script>
 <% end %>

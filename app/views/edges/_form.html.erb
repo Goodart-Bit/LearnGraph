@@ -1,5 +1,10 @@
 <%= turbo_frame_tag "edge_#{f.index}" do %>
-  <%= f.hidden_field :id %>
+  <% edge_id = f.object.id %>
+  <% if edge_id %>
+    <%= f.hidden_field :id, value: edge_id %>
+  <% else %>
+    <%= f.hidden_field :id %>
+  <% end %>
   <% if params[:target_id] %>
     <%= f.hidden_field :target_id, value: params[:target_id], readonly: true %>
   <% else %>

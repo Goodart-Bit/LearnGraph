@@ -8,6 +8,16 @@ export default class extends Controller {
     possible_attrs = ["bold", "italic", "underline", "strike", 'link', "bulletList", "orderedList"]
     static targets = ["input"]
     editorEle = null;
+    CustomLink = Link.extend({
+        addAttributes() {
+            return {
+                ...this.parent?.(),
+                id: {
+                    default: null
+                }
+            }
+        },
+    })
 
     connect() {
         let context = this;
@@ -15,7 +25,7 @@ export default class extends Controller {
             element: this.element,
             extensions: [
                 StarterKit,
-                Link,
+                this.CustomLink,
                 Underline
             ],
             content: this.inputTarget.value,
@@ -39,7 +49,7 @@ export default class extends Controller {
                     },
                     appendLink: (view, e) => {
                         let linkData = e.detail.note;
-                        this.addZkLink(linkData.title, linkData.url)
+                        this.addZkLink(linkData.title, linkData.url, linkData.id)
                     }
                 }
             }
@@ -48,11 +58,11 @@ export default class extends Controller {
 
     updateModifiedLink(pressedKeyId){
         if (!this.mutableKeyEventOnLink(pressedKeyId)) return;
-        if(pressedKeyId === 8) return this.deleteFocusLinkMark(true);
+        if(pressedKeyId === 8) return this.deleteFocusLinkMark(true, this.getNodeInCursor());
         let touchedNodeText = this.getNodeInCursor().text;
         let textCursorIdx = this.getNoteTextCursorIdx(touchedNodeText);
         let corruptingUpdate = textCursorIdx > 0 && textCursorIdx < touchedNodeText.length
-        this.deleteFocusLinkMark(corruptingUpdate);
+        this.deleteFocusLinkMark(corruptingUpdate, this.getNodeInCursor());
     }
 
     getNoteTextCursorIdx(textNodeStr) {
@@ -144,12 +154,37 @@ export default class extends Controller {
         return node.marks.find((mark) => { return mark.type.name === 'link'; })
     }
 
-    addZkLink(name, url) {
-        this.editor.commands.insertContent(`<a href=${url} class='zk_link'>${name}</a>`);
+    addZkLink(name, url, id) {
+        this.editor.commands.insertContent(`<a href=${url} class='zk_link' id=${id}>${name}</a>`);
     }
 
-    deleteFocusLinkMark(unsetNodeLink) {
-        unsetNodeLink ? this.editor.commands.unsetLink() : this.editor.commands.unsetMark('link');
+    deleteFocusLinkMark(unsetNodeLink, node) {
+        if(!unsetNodeLink) return this.editor.commands.unsetMark('link');
+        this.deleteLinkOnForm(node.marks[0].attrs.id)
+        this.editor.commands.unsetLink();
+    }
+
+    deleteLinkOnForm(nodeId) {
+        let edgeFormElem = document.getElementById('pointer-edges')
+        let edgeFormChildren = Array.from(edgeFormElem.children)
+        for(let idx = 0; idx < edgeFormChildren.length; idx++){
+            let edgeSubForm = edgeFormChildren[idx]
+            let targetId = edgeSubForm.children[1].value
+            if (targetId != nodeId) continue;
+            if (this.setDestroyInPointer(edgeSubForm, idx)) return;
+        }
+    }
+
+    // If two or more links to the same note are deleted, the deleteLinkOnForm() method can't only
+    // place the input on the first edgeSubForm match
+    setDestroyInPointer(pointerFormElem, pointerIdx){
+        let destroyInput = `<input value="true" autocomplete="off" type="hidden" ` +
+            `name="note[pointers_attributes][${pointerIdx}][_destroy]" id="note_pointers_attributes_${pointerIdx}__destroy">`
+        let pointerInputs = Array.from(pointerFormElem.children)
+        let destroyIsSet = pointerInputs.some((input) => { return input.outerHTML === destroyInput });
+        if(destroyIsSet) return false;
+        pointerFormElem.insertAdjacentHTML('beforeend', destroyInput);
+        return true;
     }
 
     // GLOBAL METHODS
@@ -160,7 +195,29 @@ export default class extends Controller {
 
     getNodeInCursor() {
         let resolvedPos = this.editor.state.selection.$head.parentOffset
-        let posInNode = resolvedPos > 0 ? resolvedPos - 1 : 0
+        let posInNode = resolvedPos > 1 ? resolvedPos - 1 : 0
         return this.editor.state.selection.$head.parent.nodeAt(posInNode)
+    }
+
+    async appendLinkToEditor(){
+        const selectedNoteId = this.getFormLinkNoteId();
+        if(selectedNoteId < 0) return;
+        const noteUrl = `${this.data.get('notesUrl')}/${selectedNoteId}`
+        const targetNote = await this.fetchNote(noteUrl);
+        const appendRequest  = new CustomEvent('appendLink', { detail: {note: targetNote}});
+        this.editorEle.dispatchEvent(appendRequest);
+    }
+
+    async fetchNote(noteUrl){
+        const noteResponse = await fetch(noteUrl)
+        let note = await noteResponse.json();
+        note.url = noteUrl
+        return note;
+    }
+
+    getFormLinkNoteId(){
+        let linkNoteInputs = Array.from(document.getElementById('link-select-form').children)
+        let checkedRadio = linkNoteInputs.find((input) => input.checked)
+        return checkedRadio ? checkedRadio.value : -1;
     }
 }

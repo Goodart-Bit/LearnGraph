@@ -29,10 +29,9 @@ class NotesController < ApplicationController
 
     def update
         if @note.update(note_params)
-            flash.now[:notice] = 'La nota se actualizó correctamente'
-            render action: :edit, status: :ok
+            redirect_to edit_note_path(@note), flash: { notice: 'Nota guardada con éxito' }
         else
-            render action: :edit, status: :unprocessable_entity, alert: 'Hubo un error al intentar actualizar la nota'
+            redirect_to action: :edit, status: :unprocessable_entity, alert: 'Hubo un error al intentar actualizar la nota'
         end
     end
 
@@ -54,7 +53,7 @@ class NotesController < ApplicationController
     end
 
     def note_params
-        permitted_attributes = params.require(:note).permit(:title, :body, pointers_attributes: [:id, :target_id])
+        permitted_attributes = params.require(:note).permit(:title, :body, pointers_attributes: [:id, :target_id, :_destroy])
         map_target_notes permitted_attributes[:pointers_attributes]
         permitted_attributes
     end

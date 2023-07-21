@@ -1,5 +1,5 @@
 <%= form_with model: @note do |f| %>
-    <div id="editor-holder" data-controller="tiptap" class="element">
+    <div id="editor-holder" data-controller="tiptap"  data-tiptap-notes-url=<%= notes_url %> class="element">
         <% if @note.new_record? %> 
             <%= f.hidden_field :body, data: {tiptap_target: "input"} %>
             <%= f.text_field :title, placeholder: "Titulo de nota", id: "title" %>
