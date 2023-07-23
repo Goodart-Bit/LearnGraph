@@ -8,7 +8,7 @@
           <%= f.radio_button :target_id, match_note.id %>
           <%= f.label "target_id_#{match_note.id}".to_sym, match_note.title %>
         <% end %>
-        <%= f.submit 'Enlazar', style: 'display: block', id: 'add-link', 'data-action': "tiptap#appendLinkToEditor"  %>
+        <%= f.submit 'Enlazar', style: 'display: block', id: 'add-link', 'data-action': "tiptap#insertLinkInEditor"  %>
       <% end %>
     <% end %>
 <% end %>
