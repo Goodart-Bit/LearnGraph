@@ -16,6 +16,7 @@
     background-color: rgba(178, 235, 106, 1);
     height: 400px;
     width: 800px;
+    position: relative;
 }
 
 #note-page * {
@@ -43,7 +44,7 @@
 }
 
 .edit-style.small {
-    width: 20%;
+    width: 15%;
 }
 
 .edit-style.medium {

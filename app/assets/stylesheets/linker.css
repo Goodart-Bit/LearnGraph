@@ -1,4 +1,11 @@
 .note-linker {
-    background-color: #999999;
-    width: 50%;
+    background-color: rgb(184, 236, 82);
+    box-shadow: 5px 8px 15px rgba(0, 0, 0, 0.28);
+    border: solid black 1px;
+    width: 45%;
+    position: absolute;
+    right: 80px;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 1;
 }

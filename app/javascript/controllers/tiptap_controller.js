@@ -4,6 +4,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
 import {TipTapLinkHelper} from "../helpers/tiptap_link_helper";
+import {EditorWebSpeechHelper} from '../helpers/google_speech'
 
 export default class extends Controller {
     possible_attrs = ["bold", "italic", "underline", "strike", 'link', "bulletList", "orderedList"]
@@ -148,6 +149,16 @@ export default class extends Controller {
 
     addUl() {
         this.editor.chain().focus().toggleBulletList().run();
+    }
+
+    async listenNote() {
+        let editorText = this.editor.state.doc.textContent;
+        EditorWebSpeechHelper.speak(editorText);
+    }
+
+    async fillNoteWithSpeech(){
+        let textFromSpeech = await EditorWebSpeechHelper.getTextFromSpeech();
+        this.editor.commands.insertContent(textFromSpeech + ' ');
     }
 
     // LINK HANDLERS
