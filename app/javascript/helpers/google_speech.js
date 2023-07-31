@@ -8,6 +8,9 @@ export class EditorWebSpeechHelper {
         this.message.lang = 'es-MX';
         const speechButton = document.getElementById('speechToTextButton');
         const storedBtnTitle = speechButton.innerHTML;
+        window.addEventListener("pagehide",()=>{
+            window.speechSynthesis.cancel();
+        })
         this.recognization.onstart = () => {
             speechButton.innerHTML = 'Listening...'
         }
@@ -29,6 +32,7 @@ export class EditorWebSpeechHelper {
 
     static speak(text){
         this.message.text = text;
+        speechSynthesis.cancel();
         window.speechSynthesis.speak(this.message);
         this.handleSpeaking();
     }
