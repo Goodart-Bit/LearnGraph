@@ -1,20 +1,17 @@
 <%= content_for :head do %>
   <%= stylesheet_link_tag 'linker', 'data-turbo-track': 'reload' %>
 <% end %>
-<div class="note-linker">
-  <%= turbo_frame_tag id="filter-notes" do %>
-    <form>
-
-    </form>
+<% content_for :toolbox_content do %>
+  <%= turbo_frame_tag "filter-notes" do %>
     <% pointer_index = note.pointers.size %>
-    <%= form_with url: new_edge_path(pointer_index), method: :get do |f| %>
+    <form></form>
+    <%= form_with url: new_edge_url(pointer_index), method: :get do |f| %>
       <%= f.hidden_field :note_id, value: note.id %>
       <%= f.label :title_query, 'Título:'%>
       <%= f.text_field :title_query %>
       <%= f.submit 'Buscar' %>
     <% end %>
-    <button type="button">X</button>
-    <div id="filtered-notes">
-    </div>
+    <div id="filtered-notes"></div>
   <% end %>
-</div>
+<% end %>
+<%= render "notes/shared/tool_window", class_list: ['note-linker'], caller_id: 'linker-window', tool_title: "Enlazar nota" %>

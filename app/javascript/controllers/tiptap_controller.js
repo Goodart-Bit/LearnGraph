@@ -151,6 +151,10 @@ export default class extends Controller {
         this.editor.chain().focus().toggleBulletList().run();
     }
 
+    linkNote() {
+        let toolWindow = document.getElementById("linker-window");
+        toolWindow.style.display = 'block';
+    }
     async listenNote() {
         let editorText = this.editor.state.doc.textContent;
         EditorWebSpeechHelper.speak(editorText);

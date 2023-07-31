@@ -53,7 +53,6 @@
 
 .edit-style button {
     flex: 1;
-    cursor: pointer;
     background-color: transparent;
     font-weight: bolder;
     border: none;
@@ -157,4 +156,30 @@ div.ProseMirror-focused {
  i {
      font-size: 1.5em;
      cursor: pointer;
+ }
+
+ div.toolbox {
+     background-color: rgb(184, 236, 82);
+     box-shadow: 5px 8px 15px rgba(0, 0, 0, 0.28);
+     border: solid black 1px;
+     position: absolute;
+     border-radius: 10px;
+     padding: 10px;
+     z-index: 1;
+     display: none;
+ }
+
+ button {
+     cursor: pointer;
+ }
+
+ .tool-button {
+     position: relative;
+     background-color: transparent;
+     border: none;
+ }
+
+ #toolbox-top {
+     display: flex;
+     justify-content: space-between;
  }

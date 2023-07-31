@@ -1,0 +1,10 @@
+<% class_string = class_list&.join(' ') %>
+<div class="toolbox <%= class_string %>" id="<%= caller_id %>">
+  <div id="toolbox-top">
+    <span><%= tool_title %></span>
+    <button class="tool-button transparent" type="button" onclick="this.parentElement.parentElement.style.display = 'none';">X</button>
+  </div>
+  <div>
+    <%= yield :toolbox_content %>
+  </div>
+</div>
