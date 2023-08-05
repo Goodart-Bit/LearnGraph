@@ -183,3 +183,7 @@ div.ProseMirror-focused {
      display: flex;
      justify-content: space-between;
  }
+
+ #cancel-button {
+     display: none;
+ }
