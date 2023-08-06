@@ -45,6 +45,9 @@ gem "bootsnap", require: false
 # Authentication and authorization Framework
 gem "devise"
 
+# AWS S3 Bucket Sdk
+gem 'aws-sdk-s3'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
