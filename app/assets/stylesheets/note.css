@@ -35,20 +35,24 @@
     height: 10%;
     margin-bottom: 30px;
     display: flex;
+    column-gap: 10px;
     justify-content: space-between;
 }
 
 .edit-style {
     display: inline-flex;
-    height: 90%;
 }
 
 .edit-style.small {
-    width: 15%;
+    flex: 1;
 }
 
 .edit-style.medium {
-    width: 40%;
+    flex: 2;
+}
+
+.edit-style.large {
+    flex: 3;
 }
 
 .edit-style button {
