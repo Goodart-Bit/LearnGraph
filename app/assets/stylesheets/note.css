@@ -191,3 +191,7 @@ div.ProseMirror-focused {
  #cancel-button {
      display: none;
  }
+
+#editor-holder img {
+    max-width: 100%;
+}

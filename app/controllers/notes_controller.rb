@@ -53,7 +53,9 @@ class NotesController < ApplicationController
     end
 
     def note_params
-        permitted_attributes = params.require(:note).permit(:title, :body, pointers_attributes: [:id, :target_id, :_destroy])
+        attributes = [:title, :body, images: [], pointers_attributes: [:id, :target_id, :_destroy]]
+        permitted_attributes = params.require(:note).permit(attributes)
+        permitted_attributes.delete(:images) if permitted_attributes[:images] == [""] # TODO: Handle deleted requests
         map_target_notes permitted_attributes[:pointers_attributes]
         permitted_attributes
     end

@@ -3,8 +3,10 @@ import {Editor} from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
+import Image from '@tiptap/extension-image'
 import {TipTapLinkHelper} from "../helpers/tiptap_link_helper";
 import {EditorWebSpeechHelper} from '../helpers/google_speech'
+import * as multimedia from "../helpers/multimedia_helper";
 
 export default class extends Controller {
     possible_attrs = ["bold", "italic", "underline", "strike", 'link', "bulletList", "orderedList"]
@@ -28,7 +30,8 @@ export default class extends Controller {
             extensions: [
                 StarterKit,
                 this.CustomLink,
-                Underline
+                Underline,
+                Image
             ],
             content: this.inputTarget.value,
             onTransaction() {
@@ -163,6 +166,12 @@ export default class extends Controller {
     async fillNoteWithSpeech(){
         let textFromSpeech = await EditorWebSpeechHelper.getTextFromSpeech();
         this.editor.commands.insertContent(textFromSpeech + ' ');
+    }
+
+    async addImage(){
+        await multimedia.addToImgInput();
+        let img = multimedia.getLastInputImg();
+        multimedia.appendToEditor(img, this.editor);
     }
 
     // LINK HANDLERS
