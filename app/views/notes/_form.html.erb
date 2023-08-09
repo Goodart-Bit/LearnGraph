@@ -16,8 +16,9 @@
               <% end %>
             </div>
             <div id="persisted-images">
-              <% @note.images.each do |image| %>
-                <%= image_tag image %>
+              <% @note.images.each_with_index do |image| %>
+                <%= image.checksum %>
+                <%= image_tag image, id: "image#{image.id}", class: 'hidden' %>
               <% end %>
             </div>
         <% end %>
