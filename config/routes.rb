@@ -14,6 +14,9 @@ Rails.application.routes.draw do
     collection do
       get 'graph' => 'notes#graph_index'
     end
+    member do
+      post 'new_image' => 'notes#add_note_img', defaults: { format: 'turbo_stream' }
+    end
   end
   resources 'edges', only: [], param: :index do
     member do

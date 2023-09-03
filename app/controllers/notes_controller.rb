@@ -1,5 +1,5 @@
 class NotesController < ApplicationController
-    before_action :set_note, only: %i[show edit update destroy]
+    before_action :set_note, only: %i[show edit update destroy add_note_img]
     def new
         @note = Note.new
     end
@@ -46,6 +46,11 @@ class NotesController < ApplicationController
     def graph_index
     end
 
+    def add_note_img
+        uploaded_file = params[:new_image]
+        @image_id = @note.generate_file_id uploaded_file.to_io
+    end
+
     private
 
     def set_note
@@ -55,7 +60,7 @@ class NotesController < ApplicationController
     def note_params
         attributes = [:title, :body, images: [], pointers_attributes: [:id, :target_id, :_destroy]]
         permitted_attributes = params.require(:note).permit(attributes)
-        permitted_attributes.delete(:images) if permitted_attributes[:images] == [""] # TODO: Handle deleted requests
+        #permitted_attributes.delete(:images) if permitted_attributes[:images] == [""] # TODO: Handle deleted requests
         map_target_notes permitted_attributes[:pointers_attributes]
         permitted_attributes
     end

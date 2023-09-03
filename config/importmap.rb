@@ -5,6 +5,7 @@ pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
 pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
 pin_all_from "app/javascript/controllers", under: "controllers"
+pin_all_from 'app/javascript/helpers', under: 'helpers'
 pin "@tiptap/core", to: "https://ga.jspm.io/npm:@tiptap/core@2.0.4/dist/index.js"
 pin "@tiptap/pm/commands", to: "https://ga.jspm.io/npm:@tiptap/pm@2.0.4/commands/dist/index.js"
 pin "@tiptap/pm/keymap", to: "https://ga.jspm.io/npm:@tiptap/pm@2.0.4/keymap/dist/index.js"

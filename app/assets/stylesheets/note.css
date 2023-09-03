@@ -195,3 +195,7 @@ div.ProseMirror-focused {
 #editor-holder img {
     max-width: 100%;
 }
+
+#editor-tools .toolbox-form button {
+    height: 100%;
+}

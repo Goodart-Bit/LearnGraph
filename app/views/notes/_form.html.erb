@@ -7,13 +7,14 @@
         <% else %> <!-- SI LA NOTA NO ES NUEVA, SE DEBEN CARGAR SUS DATOS EN EL EDITOR -->
             <%= f.hidden_field :body, data: {tiptap_target: "input"}, value: @note.body %>
             <%= f.text_field :title, placeholder: "Titulo de nota", id: "title", value: @note.title %>
-            <%= f.file_field :images, multiple: true, id:'new-image-field', accept: 'image/png, image/jpeg'%>
             <p class="note-data">Ultima modificacion: <%= @note.updated_at %></p>
             <%= render "notes/shared/link_note_form", note: @note, note_form: f %>
             <div id='pointer-edges'>
               <%= f.fields_for :pointers do |pointers_f| %>
                 <%= render 'edges/form', f: pointers_f %>
               <% end %>
+            </div>
+            <div id="added-images">
             </div>
             <div id="persisted-images">
               <% @note.images.each_with_index do |image| %>

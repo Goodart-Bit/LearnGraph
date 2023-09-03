@@ -1,8 +1,10 @@
-const imageInputField = document.getElementById('new-image-field');
+const imageInputField = document.getElementById('new-image-input');
 const imgDataTransfer = new DataTransfer();
+const newSubmitBtn = document.getElementById('new-img-submit');
 const _URL = window.webkitURL;
+let lastUploadedImg;
 
-export function addToImgInput() {
+export function addImgInput() {
     imageInputField.click();
     return new Promise((resolve, reject) => {
         imageInputField.onchange = (e) => {
@@ -17,17 +19,26 @@ export function addToImgInput() {
 }
 
 // Most recently uploaded images are at the end of the files of the input[type="file"]
-export function getLastInputImg(){
-    let lastUploadedImg = imgDataTransfer.files[imgDataTransfer.files.length - 1];
+export function getLastUploadedImg(){
+    lastUploadedImg = imageInputField.files[imageInputField.files.length - 1];
     let img = new Image();
     img.src = _URL.createObjectURL(lastUploadedImg);
     return img;
 }
 
-export function appendToEditor(img, editor){
+export function appendToEditor(checksum){
+    let img = getLastUploadedImg();
+    img.checksum = checksum;
     img.onload = (e) => {
-        editor.commands.setImage({ src: img.src });
+        const appendImgRequest  = new CustomEvent('insertNewImage',
+            { detail: {img: img}});
+        const editorEle = document.getElementsByClassName("ProseMirror")[0];
+        editorEle.dispatchEvent(appendImgRequest);
     }
+}
+
+export function submitNewImage(){
+    newSubmitBtn.click();
 }
 
 export function deleteFormImage(fileUrl){

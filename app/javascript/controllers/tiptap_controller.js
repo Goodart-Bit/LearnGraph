@@ -18,7 +18,18 @@ export default class extends Controller {
                 ...this.parent?.(),
                 id: {
                     default: null
-                }
+                },
+            }
+        },
+    })
+
+    CustomImage = Image.extend({
+        addAttributes() {
+            return {
+                ...this.parent?.(),
+                checksum: {
+                    default: null
+                },
             }
         },
     })
@@ -31,7 +42,7 @@ export default class extends Controller {
                 StarterKit,
                 this.CustomLink,
                 Underline,
-                Image
+                this.CustomImage,
             ],
             content: this.inputTarget.value,
             onTransaction() {
@@ -61,6 +72,10 @@ export default class extends Controller {
                     appendLink: (view, e) => {
                         let linkData = e.detail.note;
                         this.tipTapLinkHelper.addZkLink(linkData.title, linkData.url, linkData.id)
+                    },
+                    insertNewImage: (view, e) => {
+                        let img = e.detail.img;
+                        this.editor.commands.setImage({ src: img.src, checksum: img.checksum });
                     }
                 }
             }
@@ -168,10 +183,15 @@ export default class extends Controller {
         this.editor.commands.insertContent(textFromSpeech + ' ');
     }
 
-    async addImage(){
-        await multimedia.addToImgInput();
-        let img = multimedia.getLastInputImg();
-        multimedia.appendToEditor(img, this.editor);
+    async addImage() {
+        await multimedia.addImgInput();
+        /*let img = multimedia.getLastUploadedImg();
+        multimedia.appendToEditor(img, this.editor);*/
+        multimedia.submitNewImage();
+    }
+
+    appendCachedImgToEditor(imgChecksum){
+        multimedia.appendToEditor(imgChecksum);
     }
 
     // LINK HANDLERS

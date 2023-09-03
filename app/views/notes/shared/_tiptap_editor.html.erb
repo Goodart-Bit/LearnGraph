@@ -18,7 +18,13 @@
   </div>
   <div class="edit-style medium">
     <button data-action="tiptap#linkNote" type="button">Enlazar nota</button>
-    <button data-action="tiptap#addImage" type="button">Agregar imagen</button>
+    <%= turbo_frame_tag :image_catcher do %>
+      <%= form_with url: new_image_note_path, method: 'post', id:'new-image-form', class: 'toolbox-form', multipart: true do |f| %>
+        <%= f.submit id: 'new-img-submit', hidden: true %>
+        <%= f.file_field :new_image, id:'new-image-input', hidden: true %>
+        <button data-action="tiptap#addImage" type="button">Agregar imagen</button>
+      <% end %>
+    <% end %>
     <!-- <button>Add link</button> -->
   </div>
   <!-- div class="edit-style small">
