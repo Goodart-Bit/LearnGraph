@@ -15,11 +15,11 @@
               <% end %>
             </div>
             <div id="added-images">
+              <%= f.file_field :test, hidden:true, readonly: true %>
             </div>
             <div id="persisted-images">
               <% @note.images.each_with_index do |image| %>
-                <%= image.checksum %>
-                <%= image_tag image, id: "image#{image.id}", class: 'hidden' %>
+                <%= image_tag image, id: "#{@note.id}-#{image.checksum}", class: 'hidden' %>
               <% end %>
             </div>
         <% end %>

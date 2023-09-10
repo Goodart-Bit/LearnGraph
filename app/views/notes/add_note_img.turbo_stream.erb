@@ -1,11 +1,6 @@
 <%= turbo_stream.append 'added-images' do %>
-  <!-- <%= fields model: @note do |f| %>
-    <%= f.file_field :images, id: "image_input", tiptap_id: @image_id, accept: 'image/png, image/jpeg', multiple: true %>
-  <% end %> -->
   <script type="module">
-    import { appendToEditor } from "<%= javascript_path "helpers/multimedia_helper" %>";
-
-    appendToEditor('<%= @image_id %>')
+    import { processNewImage } from "<%= javascript_path "helpers/multimedia_helper" %>";
+    processNewImage('<%= @image_id %>');
   </script>
-
 <% end %>

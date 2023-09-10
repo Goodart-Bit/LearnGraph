@@ -30,6 +30,9 @@ export default class extends Controller {
                 checksum: {
                     default: null
                 },
+                contenteditable: {
+                    default: true
+                }
             }
         },
     })
@@ -52,6 +55,7 @@ export default class extends Controller {
                 context.populateInput();
             },
             onCreate({editor}) {
+                multimedia.resetImgSrcs(context.editor);
                 let parent = document.getElementById("editor-holder")
                 let bottom_bar = document.getElementById("bottom-bar")
                 context.editorEle = document.getElementsByClassName("ProseMirror")[0];

@@ -2,7 +2,7 @@ const imageInputField = document.getElementById('new-image-input');
 const imgDataTransfer = new DataTransfer();
 const newSubmitBtn = document.getElementById('new-img-submit');
 const _URL = window.webkitURL;
-let lastUploadedImg;
+const persistedImgs = Array.from(document.getElementById("persisted-images").children);
 
 export function addImgInput() {
     imageInputField.click();
@@ -12,18 +12,30 @@ export function addImgInput() {
             resolve(file);
         }
     }).then((file) => {
-        //imgFile.relativePath = _URL.createObjectURL(imgFile);
         imgDataTransfer.items.add(file);
-        imageInputField.files = imgDataTransfer.files;
     });
 }
 
 // Most recently uploaded images are at the end of the files of the input[type="file"]
 export function getLastUploadedImg(){
-    lastUploadedImg = imageInputField.files[imageInputField.files.length - 1];
+    let lastUploadedImg = imageInputField.files[imageInputField.files.length - 1];
     let img = new Image();
     img.src = _URL.createObjectURL(lastUploadedImg);
     return img;
+}
+
+// processing of a new image consists of two steps
+// 1. storing the image input in the added images div to be sent to the controller
+// 2. appending such image in the editor
+// 3. cleaning the image
+export function processNewImage(checksum){
+    let form_button = document.getElementById("new-image-input")
+    let fileInput = form_button.closest("input").cloneNode(true);
+    fileInput.removeAttribute("id");
+    fileInput.setAttribute("checksum", checksum);
+    fileInput.setAttribute("name", "note[images][]");
+    document.getElementById('added-images').append(fileInput);
+    appendToEditor(checksum);
 }
 
 export function appendToEditor(checksum){
@@ -43,6 +55,26 @@ export function submitNewImage(){
 
 export function deleteFormImage(fileUrl){
     throw "URL image deletion has not been implemented";
+}
+
+export function resetImgSrcs(editor) {
+    editor.commands.command(({ tr }) => {
+        tr.doc.descendants((node, pos) => {
+            if (node.type.name === 'image') { // SI HAY IMAGENES
+                let sourceImg = persistedImgs.find(img => {
+                    return img.id === `${node.attrs.checksum}`
+                })
+                try {
+                    tr.setNodeMarkup(pos, node.type, {
+                        src: sourceImg.src, checksum: sourceImg.id, //COMPRUEBE SU CHECKSUM Y EL ENLACE
+                    })// AL QUE PERTENECEN EN S3
+                } catch {
+                    console.log(`Could not set node with id ${node.attrs.checksum} src\nimg is ${sourceImg}`)
+                }
+            }
+        })
+        return true
+    })
 }
 
 
