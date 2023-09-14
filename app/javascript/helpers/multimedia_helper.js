@@ -1,8 +1,10 @@
 const imageInputField = document.getElementById('new-image-input');
+const sessionImages = document.getElementById('added-images');
 const imgDataTransfer = new DataTransfer();
 const newSubmitBtn = document.getElementById('new-img-submit');
 const _URL = window.webkitURL;
 const persistedImgs = Array.from(document.getElementById("persisted-images").children);
+let imgNodes = [];
 
 export function addImgInput() {
     imageInputField.click();
@@ -17,7 +19,7 @@ export function addImgInput() {
 }
 
 // Most recently uploaded images are at the end of the files of the input[type="file"]
-export function getLastUploadedImg(){
+export function getLastUploadedImg() {
     let lastUploadedImg = imageInputField.files[imageInputField.files.length - 1];
     let img = new Image();
     img.src = _URL.createObjectURL(lastUploadedImg);
@@ -28,37 +30,63 @@ export function getLastUploadedImg(){
 // 1. storing the image input in the added images div to be sent to the controller
 // 2. appending such image in the editor
 // 3. cleaning the image
-export function processNewImage(checksum){
+export function processNewImage(checksum) {
     let form_button = document.getElementById("new-image-input")
     let fileInput = form_button.closest("input").cloneNode(true);
     fileInput.removeAttribute("id");
     fileInput.setAttribute("checksum", checksum);
     fileInput.setAttribute("name", "note[images][]");
-    document.getElementById('added-images').append(fileInput);
+    sessionImages.append(fileInput);
     appendToEditor(checksum);
 }
 
-export function appendToEditor(checksum){
+export function appendToEditor(checksum) {
     let img = getLastUploadedImg();
     img.checksum = checksum;
     img.onload = (e) => {
-        const appendImgRequest  = new CustomEvent('insertNewImage',
-            { detail: {img: img}});
+        const appendImgRequest = new CustomEvent('insertNewImage',
+            {detail: {img: img}});
         const editorEle = document.getElementsByClassName("ProseMirror")[0];
         editorEle.dispatchEvent(appendImgRequest);
     }
 }
 
-export function submitNewImage(){
+export function submitNewImage() {
     newSubmitBtn.click();
 }
 
-export function deleteFormImage(fileUrl){
-    throw "URL image deletion has not been implemented";
+export function getDeletedNode(editor) {
+    if (imgNodes.length === 0) imgNodes = getImgNodes(editor);
+    let currentImgNodes = getImgNodes(editor);
+    let deletedChecksums = imgNodes.filter((node) => !currentImgNodes.includes(node))
+    deletedChecksums.forEach((checksum) => addDeleteInput(checksum));
+    imgNodes = currentImgNodes;
+}
+
+export function addDeleteInput(checksum){
+    let deleteInput = document.createElement('input');
+    deleteInput.setAttribute('value', checksum);
+    deleteInput.setAttribute('name', 'note[destroy_images][]');
+    deleteInput.setAttribute('hidden', true);
+    sessionImages.append(deleteInput);
+}
+
+
+export function getImgNodes(editor) {
+    let currentNodes = [];
+    editor.state.doc.forEach((node) => {
+        if (node.type.name !== 'image') return;
+        currentNodes.push(node.attrs.checksum);
+    });
+    return currentNodes;
+}
+
+export function deleteFormImage(node) {
+    console.log(node)
 }
 
 export function resetImgSrcs(editor) {
-    editor.commands.command(({ tr }) => {
+    editor.commands.command(({tr}) => {
         tr.doc.descendants((node, pos) => {
             if (node.type.name === 'image') { // SI HAY IMAGENES
                 let sourceImg = persistedImgs.find(img => {
@@ -74,7 +102,7 @@ export function resetImgSrcs(editor) {
             }
         })
         return true
-    })
+    });
 }
 
 

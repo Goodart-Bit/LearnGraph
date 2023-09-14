@@ -11,7 +11,7 @@ import * as multimedia from "../helpers/multimedia_helper";
 export default class extends Controller {
     possible_attrs = ["bold", "italic", "underline", "strike", 'link', "bulletList", "orderedList"]
     static targets = ["input"]
-    editorEle = null;
+    editorEle;
     CustomLink = Link.extend({
         addAttributes() {
             return {
@@ -52,9 +52,11 @@ export default class extends Controller {
                 context.highlightSelectedButtons();
             },
             onUpdate({editor}) {
+                multimedia.getDeletedNode(editor);
                 context.populateInput();
             },
             onCreate({editor}) {
+                context.selectedNode = context.getNodeInCursor();
                 multimedia.resetImgSrcs(context.editor);
                 let parent = document.getElementById("editor-holder")
                 let bottom_bar = document.getElementById("bottom-bar")
@@ -66,6 +68,7 @@ export default class extends Controller {
                 handleDOMEvents: {
                     keydown: (view, e) => {
                         let keyId = e.which
+
                         if (!this.mutableKeyEventOnLink(keyId)) return;
                         let touchedNode = this.getNodeInCursor();
                         let nodeId = touchedNode.marks[0].attrs.id;

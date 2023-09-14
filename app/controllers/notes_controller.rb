@@ -29,6 +29,7 @@ class NotesController < ApplicationController
 
     def update
         if @note.update(note_params)
+            destroy_image_attrs
             redirect_to edit_note_path(@note), flash: { notice: 'Nota guardada con éxito' }
         else
             redirect_to action: :edit, status: :unprocessable_entity, alert: 'Hubo un error al intentar actualizar la nota'
@@ -60,9 +61,18 @@ class NotesController < ApplicationController
     def note_params
         attributes = [:title, :body, images: [], pointers_attributes: [:id, :target_id, :_destroy]]
         permitted_attributes = params.require(:note).permit(attributes)
-        #permitted_attributes.delete(:images) if permitted_attributes[:images] == [""] # TODO: Handle deleted requests
         map_target_notes permitted_attributes[:pointers_attributes]
         permitted_attributes
+    end
+
+    def destroy_image_attrs
+        destroyable = params.require(:note).permit([destroy_images: []])[:destroy_images]
+        return unless destroyable
+
+        destroyable.each do |checksum|
+            target_img = @note.images.find { |image| "#{@note.id}-#{image.checksum}" === checksum }
+            target_img.purge if target_img
+        end
     end
 
     def map_target_notes(permit_pointer_attrs)

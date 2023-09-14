@@ -2,11 +2,11 @@
     <div id="editor-holder" data-controller="tiptap"  data-tiptap-notes-url=<%= notes_url %> class="element">
         <% if @note.new_record? %> 
             <%= f.hidden_field :body, data: {tiptap_target: "input"} %>
-            <%= f.text_field :title, placeholder: "Titulo de nota", id: "title" %>
+            <%= f.text_field :title, placeholder: "Titulo de nota", id: "title", autocomplete: 'off' %>
             <p class="note-data">Ultima modificacion: <%= Time.new.ctime %></p>
         <% else %> <!-- SI LA NOTA NO ES NUEVA, SE DEBEN CARGAR SUS DATOS EN EL EDITOR -->
             <%= f.hidden_field :body, data: {tiptap_target: "input"}, value: @note.body %>
-            <%= f.text_field :title, placeholder: "Titulo de nota", id: "title", value: @note.title %>
+            <%= f.text_field :title, placeholder: "Titulo de nota", id: "title", value: @note.title, autocomplete: 'off' %>
             <p class="note-data">Ultima modificacion: <%= @note.updated_at %></p>
             <%= render "notes/shared/link_note_form", note: @note, note_form: f %>
             <div id='pointer-edges'>
