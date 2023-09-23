@@ -3,13 +3,14 @@ import cytoscape from "cytoscape"
 import cola from "cytoscape-cola"
 
 export default class extends Controller {
-    static targets = [ "path", "notesUrl" ]
-
+    static targets = [ "path", "notesUrl", "edgesUrl" ]
+    cyElements = {nodes: [], edges: []}
     connect(){
         cytoscape.use(cola)
         this.cy = cytoscape({
             container: document.getElementById('cy'),
-            elements: this.getNoteElements(),
+            elements: this.getElements(),
+            layout: this.getLayout(),
             style: [ // the stylesheet for the graph
                 {
                     selector: 'node',
@@ -26,17 +27,30 @@ export default class extends Controller {
                     selector: 'edge',
                     style: {
                         'width': 3,
-                        'line-color': '#ccc',
-                        'target-arrow-color': '#ccc',
+                        'line-color': '#040709',
+                        'target-arrow-color': '#040709',
                         'target-arrow-shape': 'triangle',
                         'curve-style': 'bezier'
                     }
                 }
             ],
         })
-        this.cy.layout(this.getOptions()).run()
-        this.addNodeListener()
-        this.getNotes()
+        this.addWindowListener();
+        this.addNodeListener();
+    }
+
+    addWindowListener(){
+        window.addEventListener("pageshow", async (event) => {
+            if(this.cy != null){
+                this.flushCyElements();
+                this.cy.elements().remove();
+                let updatedElements = await this.getElements();
+                let resetLayout = this.getLayout();
+                this.cy.json({
+                    elements: updatedElements
+                }).layout(resetLayout).run();
+            }
+        });
     }
 
     addNodeListener() {
@@ -44,16 +58,28 @@ export default class extends Controller {
         this.cy.on('tap', 'node', function(e){
             var node = e.target;
             let noteId = node.id()
-            window.location.href = notesUrl + noteId + "/edit";
+            window.location.assign(notesUrl + noteId + "/edit");
         });
     }
 
-    async getNoteElements() {
-        let noteObjs = await this.getNotes();
-        let elements = noteObjs.map(note => {
-            return { data: { name: note.title, id: note.id }} //Cytoscape element => {id, source, target}
+    async getElements(){
+        await this.initNoteElements();
+        return this.cyElements.nodes.concat(this.cyElements.edges);
+    }
+
+    async initNoteElements() {
+        let fetchNotes = await this.getNotes();
+        let fetchEdges = await this.getEdges();
+        fetchNotes.forEach(note => {
+            let noteData = { name: note.title, id: note.id, body: note.body }
+            let noteEdges = fetchEdges.filter(edge => edge[0] === note.id);
+            noteEdges = this.getNoteEdgesData(note.id, noteEdges);
+            this.initCyNode(noteData, noteEdges);
         });
-        return elements;
+    }
+
+    flushCyElements(){
+        this.cyElements = {nodes: [], edges: []};
     }
 
     getRandColor(){
@@ -61,7 +87,26 @@ export default class extends Controller {
         return colors[Math.floor(Math.random() * colors.length)]
     }
 
-    getOptions() {
+    initCyNode(nodeData, neighbors) {
+        this.cyElements.nodes.push({ data: nodeData });
+        neighbors.forEach(neighbor => {
+          this.cyElements.edges.push({data: neighbor});
+        });
+    }
+
+    getNoteEdgesData(noteId, noteEdges) {
+        const initialArray = [];
+        return noteEdges.reduce((linkIds, edge) => {
+            let linkId = edge.find(id => id !== noteId);
+            if(linkId > -1) {
+                linkIds.push({ id: `${noteId}-${linkId}`,
+                    source: noteId.toString(), target: linkId.toString() });
+            }
+            return linkIds;
+        }, initialArray);
+    }
+
+    getLayout() {
         // default layout options
         return {
             name: 'cola',
@@ -69,8 +114,8 @@ export default class extends Controller {
             refresh: 1, // number of ticks per frame; higher is faster but more jerky
             maxSimulationTime: 4000, // max length in ms to run the layout
             ungrabifyWhileSimulating: false, // so you can't drag nodes during layout
-            fit: true, // on every layout reposition of nodes, fit the viewport
-            padding: 30, // padding around the simulation
+            fit: false, // on every layout reposition of nodes, fit the viewport
+            padding: 20, // padding around the simulation
             boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
             nodeDimensionsIncludeLabels: false, // whether labels should be included in determining the space used by a node
 
@@ -83,7 +128,7 @@ export default class extends Controller {
             avoidOverlap: true, // if true, prevents overlap of node bounding boxes
             handleDisconnected: true, // if true, avoids disconnected components from overlapping
             convergenceThreshold: 0.01, // when the alpha value (system energy) falls below this value, the layout stops
-            nodeSpacing: function( node ){ return 10; }, // extra spacing around nodes
+            nodeSpacing: function( node ){ return 80; }, // extra spacing around nodes
             flow: undefined, // use DAG/tree flow layout if specified, e.g. { axis: 'y', minSeparation: 30 }
             alignment: undefined, // relative alignment constraints on nodes, e.g. {vertical: [[{node: node1, offset: 0}, {node: node2, offset: 5}]], horizontal: [[{node: node3}, {node: node4}], [{node: node5}, {node: node6}]]}
             gapInequalities: undefined, // list of inequality constraints for the gap between the nodes, e.g. [{"axis":"y", "left":node1, "right":node2, "gap":25}]
@@ -104,7 +149,10 @@ export default class extends Controller {
 
     async getNotes() {
         let url = this.notesUrlTarget.innerHTML
-        let obj = await (await fetch(url)).json();
-        return obj;
+        return await (await fetch(url)).json();
+    }
+
+    async getEdges(){
+        return await (await fetch(this.edgesUrlTarget.innerHTML)).json();
     }
 }

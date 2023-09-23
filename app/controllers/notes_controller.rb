@@ -20,6 +20,10 @@ class NotesController < ApplicationController
         @notes = current_user.notes
     end
 
+    def get_notes
+        render json: current_user.notes
+    end
+
     def show
         render json: @note
     end

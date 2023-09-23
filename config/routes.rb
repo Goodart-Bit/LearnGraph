@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources 'notes' do
     collection do
       get 'graph' => 'notes#graph_index'
+      get 'all' => 'notes#get_notes'
     end
   end
   resources 'edges', only: [], param: :index do
@@ -22,6 +23,8 @@ Rails.application.routes.draw do
       # delete '(:id)' => 'edges#destroy', as: ''
     end
   end
+
+  resources 'edges', only: [:index]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # Defines the root path route ("/")
   # root "articles#index"
