@@ -1,4 +1,6 @@
 class Note < ApplicationRecord
+  include Imageable
+
   belongs_to :user
   has_many :pointers, class_name: 'Edge', foreign_key: :source_id, dependent: :destroy
   has_many :mentions, class_name: 'Edge', foreign_key: :target_id, dependent: :destroy

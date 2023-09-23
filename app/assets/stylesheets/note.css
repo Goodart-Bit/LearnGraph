@@ -14,7 +14,7 @@
 #note-page {
     padding: 20px;
     background-color: rgba(178, 235, 106, 1);
-    height: 400px;
+    height: 85%;
     width: 800px;
     position: relative;
 }
@@ -35,20 +35,24 @@
     height: 10%;
     margin-bottom: 30px;
     display: flex;
+    column-gap: 10px;
     justify-content: space-between;
 }
 
 .edit-style {
     display: inline-flex;
-    height: 90%;
 }
 
 .edit-style.small {
-    width: 15%;
+    flex: 1;
 }
 
 .edit-style.medium {
-    width: 40%;
+    flex: 2;
+}
+
+.edit-style.large {
+    flex: 3;
 }
 
 .edit-style button {
@@ -187,3 +191,15 @@ div.ProseMirror-focused {
  #cancel-button {
      display: none;
  }
+
+#editor-holder img {
+    max-width: 100%;
+}
+
+#editor-tools .toolbox-form button {
+    height: 100%;
+}
+
+#new-image-form {
+    height: 100%;
+}

@@ -3,19 +3,35 @@ import {Editor} from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
+import Image from '@tiptap/extension-image'
 import {TipTapLinkHelper} from "../helpers/tiptap_link_helper";
 import {EditorWebSpeechHelper} from '../helpers/google_speech'
+import * as multimedia from "../helpers/multimedia_helper";
 
 export default class extends Controller {
     possible_attrs = ["bold", "italic", "underline", "strike", 'link', "bulletList", "orderedList"]
     static targets = ["input"]
-    editorEle = null;
+    editorEle;
     CustomLink = Link.extend({
         addAttributes() {
             return {
                 ...this.parent?.(),
                 id: {
                     default: null
+                },
+            }
+        },
+    })
+
+    CustomImage = Image.extend({
+        addAttributes() {
+            return {
+                ...this.parent?.(),
+                checksum: {
+                    default: null
+                },
+                contenteditable: {
+                    default: true
                 }
             }
         },
@@ -28,16 +44,20 @@ export default class extends Controller {
             extensions: [
                 StarterKit,
                 this.CustomLink,
-                Underline
+                Underline,
+                this.CustomImage,
             ],
             content: this.inputTarget.value,
             onTransaction() {
                 context.highlightSelectedButtons();
             },
             onUpdate({editor}) {
+                multimedia.getDeletedNode(editor);
                 context.populateInput();
             },
             onCreate({editor}) {
+                context.selectedNode = context.getNodeInCursor();
+                multimedia.resetImgSrcs(context.editor);
                 let parent = document.getElementById("editor-holder")
                 let bottom_bar = document.getElementById("bottom-bar")
                 context.editorEle = document.getElementsByClassName("ProseMirror")[0];
@@ -48,6 +68,7 @@ export default class extends Controller {
                 handleDOMEvents: {
                     keydown: (view, e) => {
                         let keyId = e.which
+
                         if (!this.mutableKeyEventOnLink(keyId)) return;
                         let touchedNode = this.getNodeInCursor();
                         let nodeId = touchedNode.marks[0].attrs.id;
@@ -58,6 +79,10 @@ export default class extends Controller {
                     appendLink: (view, e) => {
                         let linkData = e.detail.note;
                         this.tipTapLinkHelper.addZkLink(linkData.title, linkData.url, linkData.id)
+                    },
+                    insertNewImage: (view, e) => {
+                        let img = e.detail.img;
+                        this.editor.commands.setImage({ src: img.src, checksum: img.checksum });
                     }
                 }
             }
@@ -163,6 +188,17 @@ export default class extends Controller {
     async fillNoteWithSpeech(){
         let textFromSpeech = await EditorWebSpeechHelper.getTextFromSpeech();
         this.editor.commands.insertContent(textFromSpeech + ' ');
+    }
+
+    async addImage() {
+        await multimedia.addImgInput();
+        /*let img = multimedia.getLastUploadedImg();
+        multimedia.appendToEditor(img, this.editor);*/
+        multimedia.submitNewImage();
+    }
+
+    appendCachedImgToEditor(imgChecksum){
+        multimedia.appendToEditor(imgChecksum);
     }
 
     // LINK HANDLERS

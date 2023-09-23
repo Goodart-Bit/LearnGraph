@@ -1,0 +1,6 @@
+<%= turbo_stream.append 'added-images' do %>
+  <script type="module">
+    import { processNewImage } from "<%= javascript_path "helpers/multimedia_helper" %>";
+    processNewImage('<%= @image_id %>');
+  </script>
+<% end %>

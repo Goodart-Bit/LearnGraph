@@ -1,26 +1,33 @@
 <div id="editor-tools">
-    <div class="edit-style medium">
-        <button data-action="tiptap#bold" id="bold" type="button">B</button>
-        <button data-action="tiptap#italicize" id="italic" type="button">I</button>
-        <button data-action="tiptap#underline" id="underline" type="button">U_</button>
-        <button data-action="tiptap#strike" id="strike" type="button">S-</button>
-        <button data-action="tiptap#toggle_url" id="link" type="button">URL</button>
-        <button type="button">H1</button>
-        <button type="button">H2</button>
-        <button type="button">H3</button>
-        <button data-action="tiptap#addUl" id="bulletList" type="button">UL</button>
-        <button data-action="tiptap#addOl" id="orderedList" type="button">OL</button>
-    </div>
-      <div class="edit-style small">
-        <button type="button" id="cancel-button">Cancelar</button>
-        <button data-action="tiptap#listenNote" type="button" id="recognizationButton">Escuchar nota</button>
-        <button data-action="tiptap#fillNoteWithSpeech" type="button" id="speechToTextButton">Voz a texto</button>
-      </div>
-    <div class="edit-style small">
-        <button data-action="tiptap#linkNote" type="button">Enlazar nota</button>
-        <!-- <button>Add link</button> -->
-    </div>
-    <div class="edit-style small">
-        <button data-action="tiptap#logJSON">DEBUG</button>
-    </div>
+  <div class="edit-style large">
+    <button data-action="tiptap#bold" id="bold" type="button">B</button>
+    <button data-action="tiptap#italicize" id="italic" type="button">I</button>
+    <button data-action="tiptap#underline" id="underline" type="button">U_</button>
+    <button data-action="tiptap#strike" id="strike" type="button">S-</button>
+    <button data-action="tiptap#toggle_url" id="link" type="button">URL</button>
+    <button type="button">H1</button>
+    <button type="button">H2</button>
+    <button type="button">H3</button>
+    <button data-action="tiptap#addUl" id="bulletList" type="button">UL</button>
+    <button data-action="tiptap#addOl" id="orderedList" type="button">OL</button>
+  </div>
+  <div class="edit-style small">
+    <button type="button" id="cancel-button">Cancelar</button>
+    <button data-action="tiptap#listenNote" type="button" id="recognizationButton">Escuchar nota</button>
+    <button data-action="tiptap#fillNoteWithSpeech" type="button" id="speechToTextButton">Voz a texto</button>
+  </div>
+  <div class="edit-style medium">
+    <button data-action="tiptap#linkNote" type="button">Enlazar nota</button>
+    <%= turbo_frame_tag :image_catcher do %>
+      <%= form_with url: new_image_note_path, method: 'post', id:'new-image-form', class: 'toolbox-form', multipart: true do |f| %>
+        <%= f.submit id: 'new-img-submit', hidden: true %>
+        <%= f.file_field :new_image, id:'new-image-input', hidden: true %>
+        <button data-action="tiptap#addImage" type="button">Agregar imagen</button>
+      <% end %>
+    <% end %>
+    <!-- <button>Add link</button> -->
+  </div>
+  <!-- div class="edit-style small">
+      <button data-action="tiptap#logJSON">DEBUG</button>
+  </div> -->
 </div>

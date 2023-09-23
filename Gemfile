@@ -13,7 +13,7 @@ gem "sprockets-rails"
 gem "pg", "~> 1.1"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 5.0"
+gem "puma", "~> 5.6"
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
@@ -44,6 +44,9 @@ gem "bootsnap", require: false
 
 # Authentication and authorization Framework
 gem "devise"
+
+# AWS S3 Bucket Sdk
+gem 'aws-sdk-s3'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
