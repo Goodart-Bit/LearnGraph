@@ -5,6 +5,7 @@ import cola from "cytoscape-cola"
 export default class extends Controller {
     static targets = [ "path", "notesUrl", "edgesUrl" ]
     cyElements = {nodes: [], edges: []}
+    filterElements = { nodes: [], edges: []}
     connect(){
         cytoscape.use(cola)
         this.cy = cytoscape({
@@ -35,8 +36,10 @@ export default class extends Controller {
                 }
             ],
         })
+        this.initTools();
         this.addWindowListener();
         this.addNodeListener();
+        this.addEnterEvent();
     }
 
     addWindowListener(){
@@ -51,6 +54,16 @@ export default class extends Controller {
                 }).layout(resetLayout).run();
             }
         });
+    }
+
+    addEnterEvent(){
+        document.getElementById('search-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter'){
+                e.preventDefault();
+                this.triggerFilter();
+                return false;
+            }
+        })
     }
 
     addNodeListener() {
@@ -74,7 +87,7 @@ export default class extends Controller {
             let noteData = { name: note.title, id: note.id, body: note.body }
             let noteEdges = fetchEdges.filter(edge => edge[0] === note.id);
             noteEdges = this.getNoteEdgesData(note.id, noteEdges);
-            this.initCyNode(noteData, noteEdges);
+            this.initCyNode(noteData, noteEdges, this.cyElements);
         });
     }
 
@@ -83,14 +96,16 @@ export default class extends Controller {
     }
 
     getRandColor(){
-        let colors = ["#fffa78","#f371f5","#94f571","#71cbf5"]
+        let colors = ["#96e524","#f6c70d","rgb(253,132,16)","rgba(255,198,91,0.78)"]
         return colors[Math.floor(Math.random() * colors.length)]
     }
 
-    initCyNode(nodeData, neighbors) {
-        this.cyElements.nodes.push({ data: nodeData });
+    initCyNode(nodeData, neighbors, targetElements) {
+        targetElements.nodes.push({ data: nodeData });
+        if(neighbors.length === 0) return;
+
         neighbors.forEach(neighbor => {
-          this.cyElements.edges.push({data: neighbor});
+          targetElements.edges.push({data: neighbor});
         });
     }
 
@@ -154,5 +169,93 @@ export default class extends Controller {
 
     async getEdges(){
         return await (await fetch(this.edgesUrlTarget.innerHTML)).json();
+    }
+
+    triggerFilter(){
+        this.filterElements = { nodes: [], edges: []}
+        let searchInput = document.getElementById('search-input').value
+        let filterName = document.getElementById('filter-name').checked
+        let filterText = document.getElementById('filter-text').checked
+        let filterRes = this.filterNodes(searchInput, filterName, filterText)
+        this.generateFilteredGraph(filterRes);
+    }
+
+    generateFilteredGraph(filterCollection){
+        filterCollection.forEach(elem => {
+            let elemNeighboors = []
+            filterCollection.forEach(node => {
+                if(node == elem) return;
+                let noteId = elem.data('id');
+                let linkId = node.data('id');
+
+                let dfs = this.cy.elements().aStar({
+                    root: `#${noteId}`,
+                    goal: `#${linkId}`,
+                    directed: true
+                });
+                if(dfs.path && dfs.path.nodes()){
+                    let edge = { id: `${noteId}-${linkId}`, source: noteId.toString(), target: linkId.toString() }
+                    let cyEdges = Array.from(this.cy.edges())
+                    let unlinkedNeighbour = dfs.distance === 1 && !cyEdges.find(elem => elem.data('id') === edge.id);
+                    let pointedAt = cyEdges.find(elem => elem.data('id') === `${linkId}-${noteId}`) && !cyEdges.find(elem => elem.data('id') === `${noteId}-${linkId}`)
+                    let redundantConn = !cyEdges.find(elem => elem.data('id') === edge.id) && cyEdges.some(elem => elem.data('id').substring(edge.id.length - 2) === linkId);
+                    if( unlinkedNeighbour || pointedAt || redundantConn)
+                        { return; }
+                        dfs.path.select()
+                        elemNeighboors.push(edge);
+                }
+            })
+            this.initCyNode(elem.data(), elemNeighboors, this.filterElements);
+        });
+        this.cy.elements().remove();
+        this.cy.json({
+            elements: this.filterElements,
+        }).layout(this.getLayout()).run();
+    }
+
+    filterNodes(input, byName, byText){
+        let anyFilter = byName || byText
+        if(!anyFilter) { return; }
+
+        this.cy.json({elements: this.cyElements,})
+        let bothFilters = byName && byText;
+        input = input.toLowerCase();
+        return this.cy.nodes().filter((elem) => {
+            if(bothFilters) {
+                return elem.data('name').toLowerCase().includes(input) ||
+                    elem.data('body')?.toLowerCase().includes(input)
+            }
+            return byName ? elem.data('name').toLowerCase().includes(input) :
+                elem.data('body')?.toLowerCase().includes(input)
+        })
+    }
+
+    // SIDEBAR TOOLS INITIALIZERS
+    initTools() {
+        let tools = document.getElementById("side-tools")
+        this.stopNestedPropagation(tools, true);
+        let searchButton = document.getElementsByClassName('tool-btn')[0]
+        let searchForm = document.getElementsByTagName('form')[0]
+        this.setDisplayTool(searchButton, searchForm);
+    }
+
+    setDisplayTool(buttonElem, toolDiv){
+        toolDiv.style.display = 'none'
+        let targetElems = [buttonElem].concat(Array.from(buttonElem.children))
+        targetElems.forEach(elem => {
+            elem.addEventListener('click',() => {
+                let currDisplay = toolDiv.style.display
+                toolDiv.style.display = currDisplay === 'none' ? 'flex' : 'none'
+            })
+        })
+    }
+
+    stopNestedPropagation(parent, isRoot){
+        if(!isRoot){
+            parent.addEventListener('mousedown',(e) => e.stopPropagation())
+            parent.addEventListener('click',(e) => e.stopPropagation())
+        }
+        let elemChildren = Array.from(parent.children)
+        elemChildren.forEach(child => this.stopNestedPropagation(child, false))
     }
 }
