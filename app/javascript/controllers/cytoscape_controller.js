@@ -105,7 +105,7 @@ export default class extends Controller {
         if(neighbors.length === 0) return;
 
         neighbors.forEach(neighbor => {
-          targetElements.edges.push({data: neighbor});
+            targetElements.edges.push({data: neighbor});
         });
     }
 
@@ -200,9 +200,9 @@ export default class extends Controller {
                     let pointedAt = cyEdges.find(elem => elem.data('id') === `${linkId}-${noteId}`) && !cyEdges.find(elem => elem.data('id') === `${noteId}-${linkId}`)
                     let redundantConn = !cyEdges.find(elem => elem.data('id') === edge.id) && cyEdges.some(elem => elem.data('id').substring(edge.id.length - 2) === linkId);
                     if( unlinkedNeighbour || pointedAt || redundantConn)
-                        { return; }
-                        dfs.path.select()
-                        elemNeighboors.push(edge);
+                    { return; }
+                    dfs.path.select()
+                    elemNeighboors.push(edge);
                 }
             })
             this.initCyNode(elem.data(), elemNeighboors, this.filterElements);
@@ -223,10 +223,10 @@ export default class extends Controller {
         return this.cy.nodes().filter((elem) => {
             if(bothFilters) {
                 return elem.data('name').toLowerCase().includes(input) ||
-                    elem.data('body').toLowerCase().includes(input)
+                    elem.data('body')?.toLowerCase().includes(input)
             }
             return byName ? elem.data('name').toLowerCase().includes(input) :
-                elem.data('body').toLowerCase().includes(input)
+                elem.data('body')?.toLowerCase().includes(input)
         })
     }
 
