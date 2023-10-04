@@ -24,9 +24,10 @@
         </form>
       </div>
       <div class="tool">
-        <button class="tool-btn">
-          <i class="options-icon cil-note-add"></i>
+        <button class="tool-btn" onclick="document.getElementById('new-form').style.display = 'block'">
+          <i class="options-icon cil-note-add" onclick="document.getElementById('new-form').style.display = 'block'"></i>
         </button>
       </div>
     </div>
 </div>
+<%= render "notes/shared/new" %>

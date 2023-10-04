@@ -1,7 +1,6 @@
 class NotesController < ApplicationController
     before_action :set_note, only: %i[show edit update destroy add_note_img]
     def new
-        @note = Note.new
     end
 
     def create
@@ -11,8 +10,8 @@ class NotesController < ApplicationController
             flash[:alert] = 'Nota guardada con éxito' # TODO: Fish flash alert not showing on redirect
             redirect_to edit_note_path(@note), status: :see_other
         else
-            flash[:alert] = 'Hubo un error al intentar guardar la nota'
-            render action: :new, status: :unprocessable_entity
+            flash[:alert] = 'Hubo un error al intentar guardar la nota, revise que el nombre sea único'
+            render partial: "notes/shared/new", status: :unprocessable_entity
         end
     end
 
@@ -36,7 +35,7 @@ class NotesController < ApplicationController
             destroy_image_attrs
             redirect_to edit_note_path(@note), flash: { notice: 'Nota guardada con éxito' }
         else
-            redirect_to action: :edit, status: :unprocessable_entity, alert: 'Hubo un error al intentar actualizar la nota'
+            redirect_to action: :new, status: :unprocessable_entity, alert: 'Hubo un error al intentar actualizar la nota'
         end
     end
 
