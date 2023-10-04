@@ -1,11 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  source: one
-  target: one
-  user: one
+#one:
+#  source: one
+#  target: one
 
-two:
-  source: two
-  target: two
-  user: two
+#two:
+#  source: two
+#  target: two
