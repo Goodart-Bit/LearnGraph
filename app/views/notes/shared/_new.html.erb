@@ -1,0 +1,6 @@
+<%= form_with model: Note.new, id: 'new-form' do |f| %>
+  <%= f.label :title, "Ingrese el título de la nota" %>
+  <button type="button" onclick="document.getElementById('new-form').style.display = 'none'">X</button>
+  <%= f.text_field :title, id: "title", autocomplete: 'off' %>
+  <input type="submit">
+<% end %>

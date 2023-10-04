@@ -17,7 +17,7 @@
         </a>
     </div>
     <div class="option">
-        <a href="<%= new_note_path %>">
+        <a onclick="document.getElementById('new-form').style.display = 'block'">
             <i class="cil-note-add icon"></i>
             <p>Nueva nota</p>
         </a>
@@ -29,6 +29,7 @@
         </a>
     </div>
 </div>
+<%= render "notes/shared/new" %>
 <!-- <ul>
     <li><%= link_to "Crear nota", { :controller => :notes, :action => :new } %></li>
     <li><%= link_to "Grafo de notas", { :controller => :notes, :action => :graph_index } %></li>
