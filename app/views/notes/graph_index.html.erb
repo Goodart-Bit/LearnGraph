@@ -2,4 +2,32 @@
 <div id="cy" data-controller="cytoscape">
     <p data-cytoscape-target="notesUrl" class="hidden"> <%= all_notes_url %></p>
     <p data-cytoscape-target="path" class="hidden"> <%= notes_url + "/"%></p>
+    <p data-cytoscape-target="edgesUrl" class="hidden"> <%= edges_url + "/"%></p>
+    <div id="side-tools">
+      <div class="tool">
+        <button class="tool-btn">
+          <i class="options-icon cil-search"></i>
+        </button>
+        <form>
+          <div style="display: flex; align-items: stretch; column-gap: 10px">
+            <div>
+              <p>Filtrar notas</p>
+              <label for="search-input">Ingrese una entrada:</label>
+              <input type="text" id="search-input"><br>
+              <input type="checkbox" id="filter-name" checked />
+              <label for="filter-name">Por nombre</label>
+              <input type="checkbox" id="filter-text" checked />
+              <label for="filter-text">Por cuerpo</label><br>
+            </div>
+            <button data-action="cytoscape#triggerFilter" type="button">Enviar</button>
+          </div>
+        </form>
+      </div>
+      <div class="tool">
+        <button class="tool-btn" onclick="document.getElementById('new-form').style.display = 'block'">
+          <i class="options-icon cil-note-add" onclick="document.getElementById('new-form').style.display = 'block'"></i>
+        </button>
+      </div>
+    </div>
 </div>
+<%= render "notes/shared/new" %>
