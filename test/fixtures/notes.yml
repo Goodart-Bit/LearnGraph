@@ -1,11 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-#one:
-#  title: MyString
-#  user: one
-#  body: MyText
+one:
+  { id: 990, title: 'Wanty Kanty', user_id: 999, body: 'MyText' }
 
-#two:
-#  title: MyString
-#  user: two
-#  body: MyText
+two:
+  { id: 991, title: 'MyString', user_id: 999, body: 'MyText'}
+
