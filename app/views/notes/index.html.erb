@@ -1,5 +1,5 @@
 <% @notes.each do |note| %>
-    <div>
+    <div class="note">
         Titulo: <%= note.title %><br>
         Ultima mod: <%= note.updated_at %><br>
         <%= link_to "Editar", edit_note_path(note) %>

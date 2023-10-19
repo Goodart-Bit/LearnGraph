@@ -16,12 +16,16 @@ class EdgesController < ApplicationController
       end
       user_edges
     end
-    p edges
     render json: edges
   end
 
   def create
     setup_note
+    if params[:source_id] == params[:target_id]
+      flash[:alert] = 'No fue posible guardar el enlace, la nota de destino no puede ser igual
+        a la nota origen'
+      render :nothing => true, :status => :bad_request
+    end
   end
 
   private
