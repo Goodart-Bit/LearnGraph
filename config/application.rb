@@ -11,6 +11,7 @@ module LearnGraph
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
     config.i18n.default_locale = :es
+    config.time_zone = 'America/Bogota'
 
     # Configuration for the application, engines, and railties goes here.
     #

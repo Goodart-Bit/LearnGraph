@@ -1,0 +1,62 @@
+#note-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin-left: 10px;
+    padding-bottom: 10px;
+}
+
+.note-post {
+    background-color: rgb(184, 236, 82);
+    width: 300px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.note-post {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+#new-btn > * {
+    color: white;
+}
+
+#new-btn > p{
+    display: inline-block;
+}
+
+#new-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 10px;
+    border-radius: 10px;
+    background-color: #2F748A;
+    width: 10%;
+    margin: 10px;
+}
+
+#new-btn:hover {
+    background-color: #195367;
+}
+
+.small-deco{
+    font-size: 0.8rem;
+    margin-top: -20px;
+}
+
+#note-end {
+    margin-top: auto;
+    background-color: rgba(0, 0, 0, 0.38);
+    color: white;
+    text-decoration: none;
+    width: fit-content;
+    padding: 5px;
+    border-radius: 5px;
+    align-self: flex-end;
+}
+
+#note-end:hover {
+    background-color: rgba(0, 0, 0, 0.66);
+}

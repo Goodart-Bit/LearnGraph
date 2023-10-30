@@ -1,8 +1,17 @@
-<% @notes.each do |note| %>
-    <div class="note">
-        Titulo: <%= note.title %><br>
-        Ultima mod: <%= note.updated_at %><br>
-        <%= link_to "Editar", edit_note_path(note) %>
-        <%= link_to "Ver", note %>
+<%= render "notes/shared/new" %>
+<a id="new-btn" onclick="document.getElementById('new-form').style.display = 'block'">
+    <i class="cil-note-add icon"></i>
+    <p>Nueva nota</p>
+</a>
+<div id="note-wrapper">
+  <% @notes.each do |note| %>
+    <div class="note-post shadowed">
+      Título: <b><%= note.title %></b><br>
+      <span class="small-deco">Ultima edición <%= note.updated_at.strftime("%d/%m/%Y a las %l:%M %p") %></span><br>
+      <% body_text = Nokogiri::HTML(note.body).text %>
+      <% max_size = 255 %>
+      <%= body_text.size > max_size ? "#{body_text[0..max_size - 3]}..." : body_text %><br>
+      <%= link_to "Ver", edit_note_path(note), id: 'note-end', data: { 'turbo-action': :replace } %>
     </div>
-<% end %>
+  <% end %>
+</div>
