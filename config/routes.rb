@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   end
   # ROOTS
   get '/welcome' => "home#welcome", as: :user_root
+  get '/manual' => "home#help"
   root to: "home#index"
   # NOTE ROUTES
   resources 'notes' do

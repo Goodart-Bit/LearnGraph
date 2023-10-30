@@ -11,7 +11,7 @@
         </a>
     </div>
     <div class="option">
-        <a href="<%= notes_path %>">
+        <a href="<%= manual_path %>">
             <i class="cil-book icon"></i>
             <p>Manual</p>
         </a>
@@ -30,8 +30,3 @@
     </div>
 </div>
 <%= render "notes/shared/new" %>
-<!-- <ul>
-    <li><%= link_to "Crear nota", { :controller => :notes, :action => :new } %></li>
-    <li><%= link_to "Grafo de notas", { :controller => :notes, :action => :graph_index } %></li>
-    <li><%= link_to "Indice", { :controller => :notes, :action => :index, remote: true, method: :post} %></li>
-</ul> -->

@@ -6,4 +6,7 @@ class HomeController < ApplicationController
   end
   def welcome
   end
+
+  def help
+  end
 end
