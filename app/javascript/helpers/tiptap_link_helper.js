@@ -70,7 +70,7 @@ export class TipTapLinkHelper {
     async fetchNote(noteUrl) {
         const noteResponse = await fetch(noteUrl)
         let note = await noteResponse.json();
-        note.url = noteUrl
+        note.url = noteUrl + '/edit'
         return note;
     }
 }
