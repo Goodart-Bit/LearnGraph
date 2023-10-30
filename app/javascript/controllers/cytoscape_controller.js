@@ -37,23 +37,8 @@ export default class extends Controller {
             ],
         })
         this.initTools();
-        this.addWindowListener();
         this.addNodeListener();
         this.addEnterEvent();
-    }
-
-    addWindowListener(){
-        window.addEventListener("pageshow", async (event) => {
-            if(this.cy != null){
-                this.flushCyElements();
-                this.cy.elements().remove();
-                let updatedElements = await this.getElements();
-                let resetLayout = this.getLayout();
-                this.cy.json({
-                    elements: updatedElements
-                }).layout(resetLayout).run();
-            }
-        });
     }
 
     addEnterEvent(){

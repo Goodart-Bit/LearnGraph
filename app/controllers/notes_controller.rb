@@ -1,5 +1,8 @@
 class NotesController < ApplicationController
-    before_action :set_note, only: %i[show edit update destroy add_note_img]
+    before_action :assert_note, only: %i[show edit]
+    before_action :set_note, only: %i[update destroy add_note_img]
+    before_action :set_cache_headers, only: %i[index graph_index]
+
     def new
     end
 
@@ -16,6 +19,7 @@ class NotesController < ApplicationController
     end
 
     def index
+        session[:redirect_to] = request.fullpath
         @notes = current_user.notes
     end
 
@@ -44,10 +48,12 @@ class NotesController < ApplicationController
             flash.now[:alert] = 'Hubo un error al intentar borrar la nota'
             return render @note
         end
-        redirect_to notes_path, notice: 'Se eliminó la nota correctamente'
+        redirect_target = session[:redirect_to] ? session[:redirect_to] : notes_path
+        redirect_to redirect_target, status: :see_other
     end
 
     def graph_index
+        session[:redirect_to] = request.fullpath
     end
 
     def add_note_img
@@ -59,6 +65,14 @@ class NotesController < ApplicationController
 
     def set_note
         @note = Note.find(params[:id])
+    end
+
+    def assert_note
+        begin
+            @note = Note.find(params[:id])
+        rescue
+            redirect_to session[:redirect_to], alert: 'Nota no encontrada, elimine el enlace de la nota.'
+        end
     end
 
     def note_params
@@ -84,4 +98,11 @@ class NotesController < ApplicationController
             permit_pointer_attrs[idx][:target] = Note.find(target_id) # CREATES A [:target] PARAMETER
         end                                                           # TO FILL IN EDGE FROM ASSOCIATION
     end                                                               # AS IT DOESNT RECEIVE TARGET_IDS BY DEFAULT
+
+    def set_cache_headers
+        response.headers["Cache-Control"] = "no-cache, no-store"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "Mon, 01 Jan 1990 00:00:00 GMT"
+    end
 end
+
