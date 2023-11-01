@@ -66,3 +66,21 @@ input[type=submit] {
 input[type=submit].green {
     background-color: rgba(146, 210, 155, 1);
 }
+
+.field i {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+#edit_user {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#edit_user .field {
+    width: 100%;
+    text-align: center;
+}
