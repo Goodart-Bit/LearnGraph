@@ -29,14 +29,35 @@
  }
 
  .alert, .notice {
-   position: fixed;
-   margin: 0;
-   top: 0;
-   width: 100%;
-   padding: 10px;
-   text-align: center;
-   background-color: rgb(219, 224, 148);
-   border: 2px solid rgb(142, 146, 90);
+     position: fixed;
+     top: 6px;
+     left: 50%;
+     transform: translate(-50%, 0);
+     width: 80%;
+     border-radius: 10px;
+     padding: 10px;
+     text-align: center;
+ }
+
+ #message-box #close-btn {
+     border: none;
+     background-color: transparent;
+     position: absolute;
+     font-size: large;
+     font-weight: bold;
+     color: rgba(0, 0, 0, 0.55);
+     right: 2px;
+     top: 2px;
+ }
+
+ .notice {
+     background-color: rgb(219, 224, 148);
+     border: 2px solid rgb(142, 146, 90);
+ }
+
+ .alert {
+     background-color: rgb(229, 94, 94);
+     border: 2px solid rgba(255, 32, 32, 0.78);
  }
 
  .column-container {

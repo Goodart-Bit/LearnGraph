@@ -16,7 +16,10 @@
 
   <body>
     <% flash.each do |class_name, msg| %>
-      <%= content_tag :div, msg, class: class_name %>
+      <%= content_tag :div, id: 'message-box', class: class_name do %>
+        <%= msg %>
+        <button onclick="document.getElementById('message-box').style.display = 'none'" id="close-btn">X</button>
+      <% end %>
     <% end %>
     <%= stylesheet_link_tag "home", "data-turbo-track": "reload" %>
     <%= render partial: "shared/nav_bar" %>
