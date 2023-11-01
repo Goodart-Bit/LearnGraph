@@ -6,16 +6,16 @@
         <p id="icon-text">LearnGraph</p>
     </a>
     <% if current_user %> <!-- DEVISE USER VALIDATION -->
-        <a href="https://www.google.com/">
-            <li>Mi perfil</li>
+        <a href="<%= edit_user_registration_url %>">
+            Mi perfil
         </a>
         <%= link_to "Salir", destroy_user_session_path, method: :delete %>
     <% else %>
         <a href="<%= root_url %>">
-            <li>Sobre LearnGraph</li>
+            Sobre LearnGraph
         </a>
         <a href="<%= new_user_session_path %>" class="nav-btn default-tone">
-            <li>INGRESA</li>
+            INGRESA
         </a>
     <% end %>
 </ul>
