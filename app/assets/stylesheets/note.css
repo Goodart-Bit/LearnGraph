@@ -8,7 +8,7 @@
 .note-data {
     margin: 0;
     padding: 0;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 #note-page {
@@ -33,10 +33,10 @@
 
 #editor-tools {
     height: 10%;
-    margin-bottom: 30px;
     display: flex;
     column-gap: 10px;
     justify-content: space-between;
+    margin-bottom: 5px;
 }
 
 .edit-style {
@@ -55,7 +55,7 @@
     flex: 3;
 }
 
-.edit-style button {
+.edit-style button, #new_tag {
     flex: 1;
     background-color: transparent;
     font-weight: bolder;
@@ -63,9 +63,13 @@
     border-right: rgba(0, 0, 0, 0.55) solid 2px;
 }
 
-.edit-style button:hover, .edit-style button.selected {
+.edit-style button:hover, .edit-style button.selected, #new_tag:hover {
     background-color: rgba(0, 0, 0, 0.55) ;
     border-right-color: transparent;
+    color: rgba(178, 235, 106, 1) !important;
+}
+
+#new_tag:hover * {
     color: rgba(178, 235, 106, 1) !important;
 }
 
@@ -237,4 +241,44 @@ div.ProseMirror-focused {
     outline: none;
     border: none;
     font-size: 1.1rem;
+}
+
+#tags {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 30px;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.tag {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 5px;
+    color: white !important;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 3px;
+    font-size: 0.9rem;
+}
+
+.tag * {
+    color: white !important;
+    text-decoration: none;
+}
+
+.tag a {
+    display: flex;
+    align-items: center;
+}
+
+#new_tag {
+    border: rgba(0, 0, 0, 0.55) solid 2px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#tag-form {
+    width: 300px;
 }
