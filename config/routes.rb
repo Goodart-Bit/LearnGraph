@@ -19,7 +19,9 @@ Rails.application.routes.draw do
     member do
       post 'new_image' => 'notes#add_note_img', defaults: { format: 'turbo_stream' }
     end
+    resources 'tags', only: %i[destroy create], defaults: { format: 'turbo_stream' }
   end
+
   resources 'edges', only: [], param: :index do
     member do
       get '/new' => 'edges#new', defaults: { format: 'turbo_stream' }

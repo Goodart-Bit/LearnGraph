@@ -1,0 +1,9 @@
+<div class="tag">
+  <i class="cil-tags"></i>
+
+  <%= tag.title.size < 30 ? tag.title : tag.title[0..27] + '...' %>
+  <% note_id = params[:id] ? params[:id] : params[:note_id] %>
+  <%= link_to note_tag_path(id: note_id, note_id: note_id, tag_id: tag.id), data: { "turbo-method": :delete } do %>
+    <i class="cil-x"></i>
+  <% end %>
+</div>

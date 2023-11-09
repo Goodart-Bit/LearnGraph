@@ -1,0 +1,13 @@
+<%= turbo_stream.update 'tags' do %>
+  <% tag_overflow = @tags.size >= 3  %>
+  <% range = tag_overflow ? (0..1) : (0..-1) %>
+  <% @tags.reverse[range].each do |tag| %>
+    <%= render 'tags/tag', tag: tag %>
+  <% end %>
+  <% if tag_overflow %>
+    <div class="tag" style="justify-content: center">
+      <i class="cil-tags"></i>
+      Mostrar más
+    </div>
+  <% end %>
+<% end %>

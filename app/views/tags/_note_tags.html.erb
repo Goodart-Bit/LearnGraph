@@ -1,0 +1,18 @@
+<div id="tags-container">
+  <button id="new_tag" type="button" onclick="document.getElementById('tag-form').style.display = 'block'">
+    <i class="cil-tags"></i><i class="cil-plus"></i></button>
+  <div id="tags">
+    <% tag_overflow = tags.size >= 3  %>
+    <% range = tag_overflow ? (0..1) : (0..-1) %>
+    <% tags.reverse[range].each do |tag| %>
+      <%= render 'tags/tag', tag: tag %>
+    <% end %>
+    <% if tag_overflow %>
+      <div class="tag" style="justify-content: center">
+        <i class="cil-tags"></i>
+        Mostrar más
+      </div>
+    <% end %>
+  </div>
+</div>
+<%= render 'tags/new' %>

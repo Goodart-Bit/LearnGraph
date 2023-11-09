@@ -1,0 +1,9 @@
+ <div class="toolbox" id="tag-form">
+   <%= turbo_frame_tag :tag_catcher do %>
+    <%= form_with url: note_tags_path(params[:id]), method: 'post' do |f| %>
+      <%= f.label :title, 'Introduzca el titulo de la etiqueta:' %>
+      <%= f.text_field :title %>
+      <%= f.submit 'Enviar' %>
+    <% end %>
+  <% end %>
+</div>
