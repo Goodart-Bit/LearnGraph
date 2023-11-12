@@ -18,6 +18,9 @@
               <label for="filter-name">Por nombre</label>
               <input type="checkbox" id="filter-text" checked />
               <label for="filter-text">Por cuerpo</label><br>
+              <input type="checkbox" id="filter-text" checked />
+              <label for="filter-text">Por etiquetas</label><br>
+              <%= render 'tags/user_tags' %>
             </div>
             <button data-action="cytoscape#triggerFilter" type="button">Enviar</button>
           </div>

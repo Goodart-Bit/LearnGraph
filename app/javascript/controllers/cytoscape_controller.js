@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import cytoscape from "cytoscape"
+import {CollectionHelper} from "../helpers/graph_collection_helper"
 import cola from "cytoscape-cola"
 
 export default class extends Controller {
@@ -39,6 +40,7 @@ export default class extends Controller {
         this.initTools();
         this.addNodeListener();
         this.addEnterEvent();
+        this.filterBuilder = new CollectionHelper(this.cy);
     }
 
     addEnterEvent(){
@@ -69,7 +71,7 @@ export default class extends Controller {
         let fetchNotes = await this.getNotes();
         let fetchEdges = await this.getEdges();
         fetchNotes.forEach(note => {
-            let noteData = { name: note.title, id: note.id, body: note.body }
+            let noteData = { name: note.title, id: note.id, body: note.body, tags: note.tags }
             let noteEdges = fetchEdges.filter(edge => edge[0] === note.id);
             noteEdges = this.getNoteEdgesData(note.id, noteEdges);
             this.initCyNode(noteData, noteEdges, this.cyElements);
@@ -166,31 +168,9 @@ export default class extends Controller {
     }
 
     generateFilteredGraph(filterCollection){
-        filterCollection.forEach(elem => {
-            let elemNeighboors = []
-            filterCollection.forEach(node => {
-                if(node == elem) return;
-                let noteId = elem.data('id');
-                let linkId = node.data('id');
-
-                let dfs = this.cy.elements().aStar({
-                    root: `#${noteId}`,
-                    goal: `#${linkId}`,
-                    directed: true
-                });
-                if(dfs.path && dfs.path.nodes()){
-                    let edge = { id: `${noteId}-${linkId}`, source: noteId.toString(), target: linkId.toString() }
-                    let cyEdges = Array.from(this.cy.edges())
-                    let unlinkedNeighbour = dfs.distance === 1 && !cyEdges.find(elem => elem.data('id') === edge.id);
-                    let pointedAt = cyEdges.find(elem => elem.data('id') === `${linkId}-${noteId}`) && !cyEdges.find(elem => elem.data('id') === `${noteId}-${linkId}`)
-                    let redundantConn = !cyEdges.find(elem => elem.data('id') === edge.id) && cyEdges.some(elem => elem.data('id').substring(edge.id.length - 2) === linkId);
-                    if( unlinkedNeighbour || pointedAt || redundantConn)
-                    { return; }
-                    dfs.path.select()
-                    elemNeighboors.push(edge);
-                }
-            })
-            this.initCyNode(elem.data(), elemNeighboors, this.filterElements);
+        let struct = this.filterBuilder.getFilteredStruct(filterCollection);
+        struct.forEach(elem => {
+            this.initCyNode(elem.data, elem.neighbors, this.filterElements);
         });
         this.cy.elements().remove();
         this.cy.json({
@@ -215,6 +195,19 @@ export default class extends Controller {
         })
     }
 
+    validInput(noteText, input) {
+        return noteText.includes(input);
+    }
+
+    validTags(noteTags, checkTags) {
+        for (const tag of checkTags){
+            if(!noteTags.includes(tag)) { return false; }
+        }
+        /*for (const tag of checkTags){
+            if(noteTags.includes(tag)) { return true; }
+        }*/
+        return true;
+    }
     // SIDEBAR TOOLS INITIALIZERS
     initTools() {
         let tools = document.getElementById("side-tools")
