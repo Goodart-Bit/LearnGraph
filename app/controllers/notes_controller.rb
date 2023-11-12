@@ -24,7 +24,7 @@ class NotesController < ApplicationController
     end
 
     def get_notes
-        render json: current_user.notes
+        render json: current_user.notes, include: ['tags']
     end
 
     def show
