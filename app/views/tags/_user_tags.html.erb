@@ -1,7 +1,4 @@
-<p>Etiquetas</p>
-<div>
-  <% current_user.tag_titles.each do |title| %>
-    <input type="checkbox" id="<%= title %>" />
-    <label for="<%= title %>"><%= title %></label><br>
-  <% end %>
-</div>
+<% current_user.tag_titles.each do |title| %>
+  <input type="checkbox" id="<%= title %>"/>
+  <label for="<%= title %>"><%= title %></label><br>
+<% end %>

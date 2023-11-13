@@ -9,4 +9,8 @@ class Note < ApplicationRecord
 
   validates :title, presence: true, uniqueness: { scope: :user_id },
             length: { in: 5..255, message: 'debe tener más de 5 carácteres' }
+
+  def tag_titles
+    tags.map { |tag| tag.title }
+  end
 end

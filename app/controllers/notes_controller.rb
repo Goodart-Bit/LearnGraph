@@ -24,7 +24,10 @@ class NotesController < ApplicationController
     end
 
     def get_notes
-        render json: current_user.notes, include: ['tags']
+        raw_notes = current_user.notes.each do |note|
+            note.body = Nokogiri::HTML(note.body).text
+        end
+        render json: raw_notes, include: [tags: {only: :title}]
     end
 
     def show
