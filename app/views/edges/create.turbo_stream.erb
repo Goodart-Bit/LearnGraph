@@ -14,3 +14,7 @@
     <% end %>
   <% end %>
 <% end %>
+
+<%= turbo_stream.replace 'linker-window' do %>
+  <%= render "notes/shared/link_note_form", note: @note, display: 'block' %>
+<% end %>

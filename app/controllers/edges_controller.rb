@@ -21,6 +21,7 @@ class EdgesController < ApplicationController
 
   def create
     setup_note
+    @note.id = params[:source_id]
     if params[:source_id] == params[:target_id]
       flash[:alert] = 'No fue posible guardar el enlace, la nota de destino no puede ser igual
         a la nota origen'

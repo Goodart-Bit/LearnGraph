@@ -8,7 +8,7 @@
             <%= f.hidden_field :body, data: {tiptap_target: "input"}, value: @note.body %>
             <%= f.text_field :title, placeholder: "Titulo de nota", id: "title", value: @note.title, autocomplete: 'off' %>
             <p class="note-data">Ultima modificacion: <%= @note.updated_at %></p>
-            <%= render "notes/shared/link_note_form", note: @note, note_form: f %>
+            <%= render "notes/shared/link_note_form", note: @note %>
             <%= render 'tags/note_tags', tags: @note.tags %>
             <div id='pointer-edges'>
               <%= f.fields_for :pointers do |pointers_f| %>

@@ -14,4 +14,10 @@
     <div id="filtered-notes"></div>
   <% end %>
 <% end %>
-<%= render "notes/shared/tool_window", class_list: ['note-linker'], caller_id: 'linker-window', tool_title: "Enlazar nota" %>
+<% if display %>
+  <%= render "notes/shared/tool_window", class_list: ['note-linker'],
+             caller_id: 'linker-window', tool_title: "Enlazar nota", display: display %>
+<% else %>
+  <%= render "notes/shared/tool_window", class_list: ['note-linker'],
+             caller_id: 'linker-window', tool_title: "Enlazar nota" %>
+<% end %>
