@@ -82,7 +82,7 @@ div.ProseMirror p {
 }
 
 div.ProseMirror {
-    height: 200px;
+    height: 180px;
     padding: 5px;
     overflow-y: auto;
 }
@@ -258,13 +258,17 @@ div.ProseMirror-focused {
     border-radius: 5px;
     color: white !important;
     background-color: rgba(0, 0, 0, 0.4);
-    padding: 3px;
+    padding: 5px;
     font-size: 0.9rem;
 }
 
 .tag * {
     color: white !important;
     text-decoration: none;
+}
+
+.tag span, .tag .tag-ico {
+    cursor: default;
 }
 
 .tag a {
@@ -281,4 +285,46 @@ div.ProseMirror-focused {
 
 #tag-form {
     width: 300px;
+}
+
+#tags-view {
+    width: 50%;
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 5px;
+    min-height: fit-content;
+    max-height: 300px;
+    overflow: auto;
+}
+
+#tags-view > .tag {
+    min-height: 30px;
+    max-height: 10%;
+}
+
+button.tag {
+    padding: 0;
+    margin: 0;
+    border: none;
+    justify-content: center;
+}
+
+button.tag:hover {
+    background-color: rgba(0, 0, 0, 0.56);
+}
+#tag-top {
+    margin: 0;
+    height: 30px;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    display: flex;
+}
+
+#tag-top h3 {
+    margin: 0;
+}
+
+#tag-top .tool-button {
+    margin-left: auto;
+    font-size: 1.3rem;
 }

@@ -8,9 +8,18 @@
       <%= render 'tags/tag', tag: tag %>
     <% end %>
     <% if tag_overflow %>
-      <div class="tag" style="justify-content: center">
-        <i class="cil-tags"></i>
-        Mostrar más
+      <button type="button" class="tag" onclick="document.getElementById('tags-view').style.display = 'grid'">
+          <i class="cil-tags"></i>
+          Mostrar más
+      </button>
+      <div class="toolbox" id="tags-view">
+        <div id="tag-top">
+          <h3>Etiquetas de la nota</h3>
+          <button class="tool-button transparent" type="button" onclick="this.parentElement.parentElement.style.display = 'none';">X</button>
+        </div>
+        <% tags.reverse.each do |tag| %>
+          <%= render 'tags/tag', tag: tag %>
+        <% end %>
       </div>
     <% end %>
   </div>
