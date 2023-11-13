@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import cytoscape from "cytoscape"
-import {CollectionHelper} from "../helpers/graph_collection_helper"
+import {Filterer} from "../helpers/filterer"
 import cola from "cytoscape-cola"
 
 export default class extends Controller {
@@ -39,18 +39,7 @@ export default class extends Controller {
         })
         this.initTools();
         this.addNodeListener();
-        this.addEnterEvent();
-        this.filterBuilder = new CollectionHelper(this.cy);
-    }
-
-    addEnterEvent(){
-        document.getElementById('search-input').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter'){
-                e.preventDefault();
-                this.triggerFilter();
-                return false;
-            }
-        })
+        this.filterer = new Filterer(this.cy);
     }
 
     addNodeListener() {
@@ -160,15 +149,12 @@ export default class extends Controller {
 
     triggerFilter(){
         this.filterElements = { nodes: [], edges: []}
-        let searchInput = document.getElementById('search-input').value
-        let filterName = document.getElementById('filter-name').checked
-        let filterText = document.getElementById('filter-text').checked
-        let filterRes = this.filterNodes(searchInput, filterName, filterText)
+        this.cy.json({elements: this.cyElements,})
+        let filterRes = this.filterer.filterNodes();
         this.generateFilteredGraph(filterRes);
     }
-
     generateFilteredGraph(filterCollection){
-        let struct = this.filterBuilder.getFilteredStruct(filterCollection);
+        let struct = this.filterer.getFilteredStruct(filterCollection);
         struct.forEach(elem => {
             this.initCyNode(elem.data, elem.neighbors, this.filterElements);
         });
@@ -178,36 +164,6 @@ export default class extends Controller {
         }).layout(this.getLayout()).run();
     }
 
-    filterNodes(input, byName, byText){
-        let anyFilter = byName || byText
-        if(!anyFilter) { return; }
-
-        this.cy.json({elements: this.cyElements,})
-        let bothFilters = byName && byText;
-        input = input.toLowerCase();
-        return this.cy.nodes().filter((elem) => {
-            if(bothFilters) {
-                return elem.data('name').toLowerCase().includes(input) ||
-                    elem.data('body')?.toLowerCase().includes(input)
-            }
-            return byName ? elem.data('name').toLowerCase().includes(input) :
-                elem.data('body')?.toLowerCase().includes(input)
-        })
-    }
-
-    validInput(noteText, input) {
-        return noteText.includes(input);
-    }
-
-    validTags(noteTags, checkTags) {
-        for (const tag of checkTags){
-            if(!noteTags.includes(tag)) { return false; }
-        }
-        /*for (const tag of checkTags){
-            if(noteTags.includes(tag)) { return true; }
-        }*/
-        return true;
-    }
     // SIDEBAR TOOLS INITIALIZERS
     initTools() {
         let tools = document.getElementById("side-tools")

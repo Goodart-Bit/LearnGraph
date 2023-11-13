@@ -1,36 +1,47 @@
 <%= stylesheet_link_tag "graph-main", "data-turbo-track": "reload" %>
 <div id="cy" data-controller="cytoscape">
-    <p data-cytoscape-target="notesUrl" class="hidden"> <%= all_notes_url %></p>
-    <p data-cytoscape-target="path" class="hidden"> <%= notes_url + "/"%></p>
-    <p data-cytoscape-target="edgesUrl" class="hidden"> <%= edges_url + "/"%></p>
-    <div id="side-tools">
-      <div class="tool">
-        <button class="tool-btn">
-          <i class="options-icon cil-search"></i>
-        </button>
-        <form>
-          <div style="display: flex; align-items: stretch; column-gap: 10px">
-            <div>
-              <p>Filtrar notas</p>
-              <label for="search-input">Ingrese una entrada:</label>
-              <input type="text" id="search-input"><br>
-              <input type="checkbox" id="filter-name" checked />
-              <label for="filter-name">Por nombre</label>
-              <input type="checkbox" id="filter-text" checked />
+  <p data-cytoscape-target="notesUrl" class="hidden"> <%= all_notes_url %></p>
+  <p data-cytoscape-target="path" class="hidden"> <%= notes_url + "/" %></p>
+  <p data-cytoscape-target="edgesUrl" class="hidden"> <%= edges_url + "/" %></p>
+  <div id="side-tools">
+    <div class="tool">
+      <button class="tool-btn">
+        <i class="options-icon cil-search"></i>
+      </button>
+      <form>
+        <div style="display: flex; align-items: stretch; column-gap: 10px">
+          <div id="filter-form">
+            <p>Filtrar notas</p>
+            <div id="selectors">
+              <input type="checkbox" id="filter-name" checked/>
+              <label for="filter-name">Por nombre</label><br>
+              <input type="checkbox" id="filter-text" checked/>
               <label for="filter-text">Por cuerpo</label><br>
-              <input type="checkbox" id="filter-text" checked />
-              <label for="filter-text">Por etiquetas</label><br>
+              <input type="checkbox" id="filter-tags" checked/>
+              <label for="filter-tags">Por etiquetas</label>
+            </div>
+            <div id="name-holder">
+              <p><label for="name-input">Ingrese un titulo</label></p>
+              <input type="text" id="name-input"><br>
+            </div>
+            <div id="body-holder">
+              <p><label for="body-input">Ingrese el cuerpo de la nota</label></p>
+              <input type="text" id="body-input"><br>
+            </div>
+            <div id="tag-holder">
+              <p>Seleccione una o más materias</p>
               <%= render 'tags/user_tags' %>
             </div>
-            <button data-action="cytoscape#triggerFilter" type="button">Enviar</button>
           </div>
-        </form>
-      </div>
-      <div class="tool">
-        <button class="tool-btn" onclick="document.getElementById('new-form').style.display = 'block'">
-          <i class="options-icon cil-note-add" onclick="document.getElementById('new-form').style.display = 'block'"></i>
-        </button>
-      </div>
+          <button data-action="cytoscape#triggerFilter" type="button">Enviar</button>
+        </div>
+      </form>
     </div>
+    <div class="tool">
+      <button class="tool-btn" onclick="document.getElementById('new-form').style.display = 'block'">
+        <i class="options-icon cil-note-add" onclick="document.getElementById('new-form').style.display = 'block'"></i>
+      </button>
+    </div>
+  </div>
 </div>
 <%= render "notes/shared/new" %>
