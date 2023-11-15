@@ -5,6 +5,7 @@ export class TipTapLinkHelper {
         this.editor = editor;
         this.editorEle = editorEle;
         this.notesUrl = notesUrl;
+        this.linkNodes = this.getLinkNodes();
     }
 
     // FUNCTIONS SOLELY ORIENTED TO UPDATING EDITOR
@@ -73,4 +74,29 @@ export class TipTapLinkHelper {
         note.url = noteUrl + '/edit'
         return note;
     }
+
+    deleteLinks() {
+        let currentLinkNodes = this.getLinkNodes();
+        let toDelete = this.linkNodes.filter((node) => !currentLinkNodes.includes(node))
+        toDelete.forEach((linkNode) => {
+            let linkId = linkNode.marks[0].attrs.id
+            this.deleteLinkOnForm(linkId);
+        });
+        this.linkNodes = currentLinkNodes;
+    }
+
+    getLinkNodes() {
+        let currentNodes = [];
+        this.editor.state.doc.forEach((node) => {
+            let textNodesArr = node.content.content;
+            textNodesArr = textNodesArr.filter((textNode) => {
+                return textNode.marks.some(
+                    (mark) => mark.attrs.class === 'zk_link' && mark.attrs.id
+                );
+            });
+            currentNodes = currentNodes.concat(textNodesArr);
+        });
+        return currentNodes;
+    }
+
 }
