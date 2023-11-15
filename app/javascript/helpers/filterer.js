@@ -64,15 +64,15 @@ export class Filterer {
     }
 
     validTitle(noteTitle) {
-        let input = this.titleInput.value;
+        let input = this.titleInput.value.toLowerCase();
         if(!document.getElementById("filter-name").checked
             || input.length === 0) { return false; }
 
-        return noteTitle.includes(input);
+        return noteTitle.toLowerCase().includes(input);
     }
 
     validBody(noteText) {
-        let input = this.bodyInput.value;
+        let input = this.bodyInput.value.toLowerCase();
         if(!document.getElementById("filter-text").checked
             || !noteText || this.bodyInput.length === 0) { return false; }
 
