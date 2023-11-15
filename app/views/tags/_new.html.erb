@@ -1,8 +1,12 @@
  <div class="toolbox" id="tag-form">
+   <div id="toolbox-top">
+     <h3>Crear una materia</h3>
+     <button class="tool-button transparent" type="button" onclick="this.parentElement.parentElement.style.display = 'none';">X</button>
+   </div>
    <%= turbo_frame_tag :tag_catcher do %>
     <%= form_with url: note_tags_path(params[:id]), method: 'post' do |f| %>
-      <%= f.label :title, 'Introduzca el titulo de la etiqueta:' %>
-      <%= f.text_field :title %>
+      <%= f.label :tag_title, 'Introduzca el titulo de la materia:' %>
+      <%= f.text_field :tag_title %>
       <%= f.submit 'Enviar' %>
     <% end %>
   <% end %>

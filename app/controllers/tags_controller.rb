@@ -3,7 +3,7 @@ class TagsController < ApplicationController
   end
 
   def create
-      Tag.create(note: Note.find(params[:note_id]), user: current_user, title: params[:title])
+      Tag.create(note: Note.find(params[:note_id]), user: current_user, title: params[:tag_title])
       @tags = Note.find(params[:note_id]).tags
       render 'refresh'
   end
