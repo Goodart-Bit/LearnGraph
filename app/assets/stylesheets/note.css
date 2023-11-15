@@ -63,9 +63,25 @@
     border-right: rgba(0, 0, 0, 0.55) solid 2px;
 }
 
-.edit-style button:hover, .edit-style button.selected, #new_tag:hover {
+.edit-style > button:hover, .edit-style button.selected, #new_tag:hover {
     background-color: rgba(0, 0, 0, 0.55) ;
     border-right-color: transparent;
+    color: rgba(178, 235, 106, 1) !important;
+}
+
+.edit-style i {
+    font-size: inherit;
+}
+
+.edit-style b {
+    font-weight: bolder;
+}
+
+.edit-style .edit-icon {
+    font-size: 1.6rem;
+}
+
+.edit-style button:hover *, .edit-style button.selected * {
     color: rgba(178, 235, 106, 1) !important;
 }
 
@@ -150,11 +166,12 @@ div.ProseMirror-focused {
     margin-left: 15px;
  }
 
- input[type="submit"] {
+ input[type="submit"], .toolbox .send {
     margin: 0;
     padding: 5px;
     background-color: transparent;
-    border: 1px black solid;
+    border-radius: 5px;
+    border: 1px black solid !important;
  }
 
  .icon-container {
@@ -312,6 +329,7 @@ button.tag {
 button.tag:hover {
     background-color: rgba(0, 0, 0, 0.56);
 }
+
 #tag-top {
     margin: 0;
     height: 30px;
@@ -320,11 +338,18 @@ button.tag:hover {
     display: flex;
 }
 
-#tag-top h3 {
+.toolbox h3 {
     margin: 0;
 }
 
 #tag-top .tool-button {
     margin-left: auto;
     font-size: 1.3rem;
+}
+
+#url-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
 }

@@ -53,6 +53,7 @@ export default class extends Controller {
             },
             onUpdate({editor}) {
                 multimedia.getDeletedNode(editor);
+                context.tipTapLinkHelper.deleteLinks()
                 context.populateInput();
             },
             onCreate({editor}) {
@@ -62,6 +63,7 @@ export default class extends Controller {
                 let bottom_bar = document.getElementById("bottom-bar")
                 context.editorEle = document.getElementsByClassName("ProseMirror")[0];
                 parent.insertBefore(context.editorEle, bottom_bar);
+                context.setUrlListener();
                 context.tipTapLinkHelper = new TipTapLinkHelper(this, context.editorEle, context.data.get('notesUrl'));
             },
             editorProps: {
@@ -87,6 +89,19 @@ export default class extends Controller {
                 }
             }
         });
+    }
+
+    setUrlListener(){
+        let urlBox = document.getElementById('url-box');
+        document.getElementById('link').addEventListener('click',() => {
+            urlBox.style.display = 'block';
+        })
+        document.getElementById('set-url').addEventListener('click',() => {
+            urlBox.style.display = 'none';
+            let inputUrl = document.getElementById('url').value;
+            let inputName = document.getElementById('url_name').value;
+            this.setUrl(inputUrl, inputName);
+        })
     }
 
     async insertLinkInEditor(){
@@ -164,8 +179,8 @@ export default class extends Controller {
         this.editor.chain().focus().toggleUnderline().run()
     }
 
-    toggle_url() {
-        this.editor.commands.toggleLink({href: 'https://youtube.com'})
+    setUrl(url, name){
+        this.editor.commands.insertContent(`<a href=${url}>${name}</a> `);
     }
 
     addOl() {
