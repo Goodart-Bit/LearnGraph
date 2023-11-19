@@ -10,6 +10,15 @@ class Note < ApplicationRecord
   validates :title, presence: true, uniqueness: { scope: :user_id },
             length: { in: 5..255, message: 'debe tener más de 5 carácteres' }
 
+  def body
+    return super unless super
+
+    EncryptionService.decrypt(super)
+  end
+  def body=(text)
+    super(EncryptionService.encrypt(text))
+  end
+
   def tag_titles
     tags.map { |tag| tag.title }
   end
