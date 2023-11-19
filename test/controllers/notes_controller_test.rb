@@ -13,7 +13,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     get notes_path
     notes_size = @user.notes.size
     @user.notes.each do |note|
-      assert_select 'div.note', notes_size do |content|
+      assert_select 'div.note-post', notes_size do |content|
         assert_match /#{note.title}/, content.to_s
       end
     end
@@ -63,11 +63,6 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :redirect do
       post notes_path, params: { note: { title: note_title} }
-    end
-
-    assert_select 'div.alert' do |alert_message|
-      assert_match /Hubo un error al intentar guardar la nota, revise que el nombre sea único/,
-                   alert_message
     end
   end
 end

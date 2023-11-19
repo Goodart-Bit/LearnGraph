@@ -1,5 +1,6 @@
 class Note < ApplicationRecord
   include Imageable
+  require_relative 'encryptor'
 
   belongs_to :user
   has_many :pointers, class_name: 'Edge', foreign_key: :source_id, dependent: :destroy
@@ -13,7 +14,12 @@ class Note < ApplicationRecord
   def body
     return super unless super
 
-    EncryptionService.decrypt(super)
+    begin
+      return EncryptionService.decrypt(super)
+    rescue
+      self.body = EncryptionService.encrypt(super)
+      return EncryptionService.decrypt(super)
+    end
   end
   def body=(text)
     super(EncryptionService.encrypt(text))
