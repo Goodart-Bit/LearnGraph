@@ -3,7 +3,10 @@ const sessionImages = document.getElementById('added-images');
 const imgDataTransfer = new DataTransfer();
 const newSubmitBtn = document.getElementById('new-img-submit');
 const _URL = window.webkitURL;
-const persistedImgs = Array.from(document.getElementById("persisted-images").children);
+let persistedImgs;
+if(document.getElementById("persisted-images")){
+    persistedImgs = Array.from(document.getElementById("persisted-images").children);
+}
 let imgNodes = [];
 
 export function addImgInput() {

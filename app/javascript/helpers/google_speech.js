@@ -7,25 +7,27 @@ export class EditorWebSpeechHelper {
     static synthesisBtn = document.getElementById('speechToTextButton');
 
     static {
-        this.message.voice = this.voices[7];
-        this.message.lang = 'es-MX';
-        const speechButton = document.getElementById('speechToTextButton');
-        window.addEventListener("pagehide",()=>{
-            window.speechSynthesis.cancel();
-        })
-        this.cancelBtn.addEventListener('click',() => {
-            if(speechSynthesis.speaking){
-                speechSynthesis.cancel();
-            } else {
-                this.recognization.abort();
+        if(this.cancelBtn) {
+            this.message.voice = this.voices[7];
+            this.message.lang = 'es-MX';
+            const speechButton = document.getElementById('speechToTextButton');
+            window.addEventListener("pagehide", () => {
+                window.speechSynthesis.cancel();
+            })
+            this.cancelBtn.addEventListener('click', () => {
+                if (speechSynthesis.speaking) {
+                    speechSynthesis.cancel();
+                } else {
+                    this.recognization.abort();
+                }
+                this.arrangeButtonUI(false);
+            })
+            this.recognization.onstart = () => {
+                this.arrangeButtonUI(true);
             }
-            this.arrangeButtonUI(false);
-        })
-        this.recognization.onstart = () => {
-            this.arrangeButtonUI(true);
-        }
-        this.recognization.onend = () => {
-            this.arrangeButtonUI(false);
+            this.recognization.onend = () => {
+                this.arrangeButtonUI(false);
+            }
         }
     }
 

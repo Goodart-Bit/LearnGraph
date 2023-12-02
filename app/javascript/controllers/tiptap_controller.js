@@ -53,7 +53,7 @@ export default class extends Controller {
             },
             onUpdate({editor}) {
                 multimedia.getDeletedNode(editor);
-                context.tipTapLinkHelper.deleteLinks()
+                if(context.tipTapLinkHelper) {context.tipTapLinkHelper.deleteLinks()}
                 context.populateInput();
             },
             onCreate({editor}) {
