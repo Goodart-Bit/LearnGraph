@@ -20,7 +20,9 @@ class NotesController < ApplicationController
 
     def index
         session[:redirect_to] = request.fullpath
-        @notes = current_user.notes
+        p params[:reverse]
+        @notes = params[:reverse] == "true" ?
+                   current_user.notes.reverse : current_user.notes
     end
 
     def get_notes

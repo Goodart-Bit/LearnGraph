@@ -29,7 +29,8 @@
             <ul>
                 <li>
                   <% if @note.persisted? %>
-                    <%= link_to raw("<i class=\"cil-trash\"></i>"), @note, data: { 'turbo-method': :delete },
+                    <%= link_to raw("<i class=\"cil-trash\"></i>"), @note, data: { 'turbo-method': :delete,
+                                                                                   'turbo-confirm': 'Esta seguro? Si elimina esta nota, no se eliminaran sus vinculos en otras notas, por tanto, tendra que borrar los enlaces manualmente.' },
                                 class: 'icon-container' %>
                   <% end %>
                 </li>

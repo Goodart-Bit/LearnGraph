@@ -18,18 +18,19 @@
     color: rgba(0, 0, 0, 0.7);
 }
 
-#new-btn > * {
+.new-btn > * {
     color: white;
 }
 
-#new-btn > p{
+.new-btn > p{
     display: inline-block;
 }
 
-#new-btn {
+.new-btn {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-decoration: none;
     column-gap: 10px;
     border-radius: 10px;
     background-color: #2F748A;
@@ -37,7 +38,7 @@
     margin: 10px;
 }
 
-#new-btn:hover {
+.new-btn:hover {
     background-color: #195367;
 }
 

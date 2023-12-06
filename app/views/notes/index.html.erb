@@ -1,8 +1,19 @@
 <%= render "notes/shared/new" %>
-<a id="new-btn" onclick="document.getElementById('new-form').style.display = 'block'">
+<a class="new-btn" onclick="document.getElementById('new-form').style.display = 'block'">
     <i class="cil-note-add icon"></i>
     <p>Nueva nota</p>
 </a>
+<% if params[:reverse] == "true" %>
+  <a class="new-btn" href="<%= notes_path(reverse: false) %>">
+    <i class="cil-sort-ascending icon"></i>
+    <p>Ordenar asc</p>
+  </a>
+<% else %>
+  <a class="new-btn" href="<%= notes_path(reverse: true) %>">
+    <i class="cil-sort-descending icon"></i>
+    <p>Ordenar desc</p>
+  </a>
+<% end %>
 <div id="note-wrapper">
   <% @notes.each do |note| %>
     <div class="note-post shadowed">
